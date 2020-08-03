@@ -30,8 +30,8 @@ const useStyles = makeStyles((theme) => ({
       "linear-gradient( 19.5deg,  rgba(245,81,4,1) 11.2%, rgba(255,181,2,1) 91.1% )",
   },
   Card: {
-    padding: "50px",
- 
+    padding: "40px",
+    borderRadius: "30px",
     margin: "5px",
     width: "auto",
   },
