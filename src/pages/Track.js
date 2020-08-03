@@ -51,11 +51,9 @@ const useStyles = makeStyles((theme) => ({
   Button: {
     background:
       "linear-gradient( 19.5deg,  rgba(245,81,4,1) 11.2%, rgba(255,181,2,1) 91.1% )",
-
     fontFamily: "Kanit",
-
     color: "white",
-
+    width:"auto",
     borderRadius: 5,
   },
 }));
