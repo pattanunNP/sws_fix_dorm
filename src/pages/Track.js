@@ -99,14 +99,14 @@ function Track() {
         </Toolbar>
       </AppBar>
       <Card className={classes.Card}>
+            <Button
+          className={classes.Button}
+          startIcon={<HomeIcon />}
+          onClick={handleBack}
+        >
+          กลับ
+        </Button>
         <Grid container jusify="center">
-          <Button
-            className={classes.Button}
-            startIcon={<HomeIcon />}
-            onClick={handleBack}
-          >
-            กลับ
-          </Button>
           <Grid item xm={3}>
             <Card jusify="center" className={classes.CardBTN}>
               <CardMedia
