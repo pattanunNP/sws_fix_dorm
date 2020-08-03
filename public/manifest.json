@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "ระบบแจ้งซ่อม",
+  "name": "SWSDorm FixReport",
   "icons": [
     {
       "src": "favicon.ico",
