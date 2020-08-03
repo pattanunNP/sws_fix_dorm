@@ -40,8 +40,6 @@ const useStyles = makeStyles((theme) => ({
     height: "auto",
     borderRadius: "20px",
     marginTop: "10px",
-    margin: "10px",
-    textDecoration: "none",
   },
   text: {
     padding: "10px",
