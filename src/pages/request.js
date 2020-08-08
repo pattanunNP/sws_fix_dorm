@@ -1,15 +1,16 @@
 import React from "react";
 import Footer from "../components/footer";
 import { makeStyles } from "@material-ui/core/styles";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import CardMedia from "@material-ui/core/CardMedia";
-import Card from "@material-ui/core/Card";
-import Grid from "@material-ui/core/Grid";
+
 import PhotoCamera from "@material-ui/icons/PhotoCamera";
 import {
   Select,
+  AppBar,
+  Toolbar ,
+  Typography ,
+  CardMedia,
+  Card,
+  Grid,
   TextField,
   InputLabel,
   MenuItem,
@@ -78,7 +79,7 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: "Kanit",
 
     color: "white",
-
+    margin: "5px",
     borderRadius: 5,
   },
   input: {
@@ -99,8 +100,9 @@ function Request() {
   });
 
   const [works, setWorks] = React.useState({
-    Image: "",
+    Image: [],
     WorkInfo: "",
+    Date: "",
   });
 
   const handleChange = (e) => {
@@ -110,10 +112,30 @@ function Request() {
   const [files, setFiles] = React.useState([]);
   // onChange function that reads files on uploading them
   // files read are encoded as Base64
+
+  function generateUUID() {
+    // Public Domain/MIT
+    var d = new Date().getTime(); //Timestamp
+    var d2 = (performance && performance.now && performance.now() * 1000) || 0; //Time in microseconds since page-load or 0 if unsupported
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (
+      c
+    ) {
+      var r = Math.random() * 16; //random number between 0 and 16
+      if (d > 0) {
+        //Use timestamp until depleted
+        r = (d + r) % 16 | 0;
+        d = Math.floor(d / 16);
+      } else {
+        //Use microseconds since page-load if supported
+        r = (d2 + r) % 16 | 0;
+        d2 = Math.floor(d2 / 16);
+      }
+      return (c === "x" ? r : (r & 0x3) | 0x8).toString(16);
+    });
+  }
+
   function onFileUpload(event) {
     event.preventDefault();
-    // Get the file Id
-    let id = event.target.id;
     // Create an instance of FileReader API
     let file_reader = new FileReader();
     // Get the actual file itself
@@ -122,15 +144,36 @@ function Request() {
       // After uploading the file
       // appending the file to our state array
       // set the object keys and values accordingly
-      setFiles([...files, { file_id: id, uploaded_file: file_reader.result }]);
+      setFiles([
+        ...files,
+        { file_id: generateUUID(), uploaded_file: file_reader.result },
+      ]);
     };
     // reading the actual uploaded file
     file_reader.readAsDataURL(file);
+    console.log(files);
   }
 
   function handleSubmit(e) {
     e.preventDefault();
-    setWorks({ ...works, Image: files[0], WorkInfo: info });
+    var today = new Date();
+
+    var time =
+      today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    const result = today.toLocaleDateString("th-TH", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      weekday: "long",
+    });
+    var dateTime = result + " เวลา " + time;
+
+    setWorks({
+      ...works,
+      Image: files,
+      WorkInfo: info,
+      Date: dateTime,
+    });
     console.log(works);
   }
 
@@ -140,7 +183,13 @@ function Request() {
 
   const listItems = files.map((f) => (
     <Grid item xs={12}>
-      <Card style={{ padding: "5px", margin: "10px", width: "110px" }}>
+      <Card
+        style={{
+          padding: "5px",
+          margin: "10px",
+          width: "110px",
+        }}
+      >
         <img
           alt="preview"
           key={f.file_id}
@@ -165,8 +214,7 @@ function Request() {
         />
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
-            ระบบแจ้งซ่อมสำหรับหอพักนักเรียน โรงเรียนสุรวิวัฒน์ (SWS Dorm
-            Maintenance request)
+            ระบบแจ้งซ่อมสำหรับหอพักนักเรียน โรงเรียนสุรวิวัฒน์
           </Typography>
         </Toolbar>
       </AppBar>
@@ -183,17 +231,6 @@ function Request() {
         <Grid container justify="center">
           <Card className={classes.card}>
             <Grid container justify="center">
-              <Grid item xs="auto">
-                <img
-                  justify="center"
-                  alt="icon"
-                  width="64px"
-                  style={{
-                    alignSelf: "center",
-                  }}
-                  src="https://image.flaticon.com/icons/svg/2949/2949851.svg"
-                />
-              </Grid>
               <Grid item xs="auto">
                 <Typography
                   justify="center"
@@ -213,7 +250,6 @@ function Request() {
 
             <form
               className={classes.root}
-              noValidate
               autoComplete="off"
               onSubmit={handleSubmit}
             >
@@ -227,7 +263,10 @@ function Request() {
               <Grid container>
                 <Grid lg={"auto"}>
                   <InputLabel
-                    style={{ marginTop: "45px" }}
+                    style={{
+                      marginTop: "45px",
+                      fontFamily: "Kanit",
+                    }}
                     id="demo-simple-select-label"
                   >
                     รหัสห้อง
@@ -247,15 +286,23 @@ function Request() {
                 </Grid>
                 <Grid item lg={"auto"}>
                   <TextField
-                    style={{ marginTop: "45px" }}
+                    style={{
+                      marginTop: "45px",
+                      fontFamily: "Kanit",
+                    }}
+                    name="RoomNumber"
                     id="standard-basic"
                     label="หมายเลขห้อง"
+                    onChange={handleChange}
                   />
                 </Grid>
               </Grid>
 
               <InputLabel
-                style={{ marginTop: "45px" }}
+                style={{
+                  marginTop: "60px",
+                  fontFamily: "Kanit",
+                }}
                 id="demo-simple-select-label"
               >
                 ประเภทงาน
@@ -272,16 +319,24 @@ function Request() {
                 <MenuItem value={"อื่นๆ"}>อื่น ๆ</MenuItem>
               </Select>
 
-              <Typography style={{ marginTop: "45px" }}>ส่งรูป</Typography>
+              <Typography
+                style={{
+                  marginTop: "45px",
+                  fontFamily: "Kanit",
+                }}
+              >
+                รูปประกอบ
+              </Typography>
               <input
-                style={{ marginTop: "45px" }}
+                style={{ marginTop: "60px" }}
                 accept="image/*"
                 className={classes.input}
                 id="icon-button-file"
                 type="file"
                 onChange={onFileUpload}
+                multiple
               />
-              <label htmlFor="icon-button-file">
+              <label htmlFor="icon-button-file" style={{ marginTop: "60px" }}>
                 <IconButton
                   style={{
                     color: "rgba(245,81,4,1)",
@@ -294,26 +349,43 @@ function Request() {
               </label>
 
               <Grid container justsify="center">
-                {listItems}
+                <Grid
+                  item
+                  xs={12}
+                  style={{
+                    overflowX: "auto",
+                    overflowY: "50px",
+                    marginBottom: "10px",
+                  }}
+                >
+                  {listItems}
+                </Grid>
 
-                <Grid item xs={6}>
+                <Grid item xs={12}>
                   <TextareaAutosize
-                    rowsMin={5}
-                    rowsMax={5}
+                    rowsMin={4}
+                    rowsMax={4}
                     value={info.Discription}
                     name="Discription"
                     aria-label="maximum height"
                     placeholder="อธิบายอาการเสีย"
                     defaultValue=""
-                    style={{ width: "280px" }}
+                    style={{
+                      margin: "10px",
+                      width: "210px",
+
+                      padding: "5px",
+                      fontFamily: "Kanit",
+                    }}
                     onChange={handleChange}
                   />
                 </Grid>
               </Grid>
 
-              <CardMedia style={{ marginTop: "45px" }}>
+              <CardMedia style={{ marginTop: "60px" }}>
                 <Button className={classes.ButtonCheckin} type="submit">
-                  <i className="fas fa-paper-plane"></i>เเจ้งซ่อม
+                  <i className="fas fa-paper-plane"></i>
+                  เเจ้งซ่อม
                 </Button>
               </CardMedia>
             </form>

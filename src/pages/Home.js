@@ -1,18 +1,21 @@
 import React from "react";
 import Footer from "../components/footer";
 import { makeStyles } from "@material-ui/core/styles";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import CardMedia from "@material-ui/core/CardMedia";
-import Card from "@material-ui/core/Card";
-import Grid from "@material-ui/core/Grid";
 import { Link, useHistory } from "react-router-dom";
-import Modal from "@material-ui/core/Modal";
-import Backdrop from "@material-ui/core/Backdrop";
-import Fade from "@material-ui/core/Fade";
-// import LockIcon from '@material-ui/icons/Lock';
-import { TextField, Button, IconButton } from "@material-ui/core";
+import {
+  TextField,
+  Button,
+  Card,
+  Grid,
+  Toolbar,
+  Typography,
+  CardMedia,
+  AppBar,
+  IconButton,
+  Fade,
+  Modal,
+  Backdrop,
+} from "@material-ui/core";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 
 const useStyles = makeStyles((theme) => ({
@@ -56,12 +59,13 @@ const useStyles = makeStyles((theme) => ({
   },
 
   CardBTN: {
+    marginLeft: "60px",
     width: "280px",
     height: "235px",
     borderRadius: "20px",
     marginTop: "20px",
-    margin: "10px",
     textDecoration: "none",
+    marginBottom: "20px",
   },
   text: {
     padding: "10px",
@@ -117,8 +121,7 @@ function Home(props) {
         />
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
-            ระบบแจ้งซ่อมสำหรับหอพักนักเรียน โรงเรียนสุรวิวัฒน์ (SWS Dorm
-            Maintenance request)
+            ระบบแจ้งซ่อมสำหรับหอพักนักเรียน โรงเรียนสุรวิวัฒน์
           </Typography>
           <IconButton onClick={handleAdmin}>
             <AccountCircleIcon
@@ -130,9 +133,9 @@ function Home(props) {
         </Toolbar>
       </AppBar>
       <Card className={classes.Card}>
-        <Grid container jusify="center">
+        <Grid container>
           <Grid item xs={7}>
-            <Card className={classes.CardBTN}>
+            <Card className={classes.CardBTN} style={{ alignSelf: "center" }}>
               <CardMedia
                 component="img"
                 alt="Thub"
@@ -159,7 +162,7 @@ function Home(props) {
             </Card>
           </Grid>
           <Grid item xs={7}>
-            <Card className={classes.CardBTN}>
+            <Card className={classes.CardBTN} style={{ alignSelf: "center" }}>
               <CardMedia
                 component="img"
                 alt="Thub"

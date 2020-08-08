@@ -1,13 +1,18 @@
 import React from "react";
 import Footer from "../components/footer";
 import { makeStyles } from "@material-ui/core/styles";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import Card from "@material-ui/core/Card";
-import Grid from "@material-ui/core/Grid";
+
 // import { useHistory } from "react-router-dom";
-import { TextField, Button, IconButton } from "@material-ui/core";
+import {
+  TextField,
+  Button,
+  IconButton,
+  Grid,
+  AppBar,
+  Toolbar,
+  Card,
+  Typograph,
+} from "@material-ui/core";
 import HomeIcon from "@material-ui/icons/Home";
 
 const useStyles = makeStyles((theme) => ({
