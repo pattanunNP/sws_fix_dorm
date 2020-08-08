@@ -4,22 +4,24 @@ import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import CardMedia from "@material-ui/core/CardMedia";
 import Card from "@material-ui/core/Card";
 import Grid from "@material-ui/core/Grid";
-import { Link, useHistory } from "react-router-dom";
-import Modal from "@material-ui/core/Modal";
-import Backdrop from "@material-ui/core/Backdrop";
-import Fade from "@material-ui/core/Fade";
-// import LockIcon from '@material-ui/icons/Lock';
+// import { useHistory } from "react-router-dom";
 import { TextField, Button, IconButton } from "@material-ui/core";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import HomeIcon from "@material-ui/icons/Home";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     fontFamily: "Kanit",
-    justifyContent: "center",
+        justifyContent: "center",
+   
+    '& label.Mui-focused': {
+      color: 'green',
+    },
+    '& .MuiInput-underline:after': {
+      borderBottomColor: 'green',
+    },
   },
   Button: {
     background:
@@ -43,7 +45,8 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: "Kanit",
     background:
       "linear-gradient( 19.5deg,  rgba(245,81,4,1) 11.2%, rgba(255,181,2,1) 91.1% )",
-  },
+    },
+  
   Card: {
     margin: "5px",
     width: "auto",
@@ -54,7 +57,6 @@ const useStyles = makeStyles((theme) => ({
     margin: "5px",
     width: "450px",
   },
-
   CardBTN: {
     width: "280px",
     height: "235px",
@@ -73,33 +75,22 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     justifyContent: "center",
   },
+  CardLogin: {
+    padding: "50px",
+    borderRadius: "30px",
+    margin: "5px",
+    width: "450px",
+  },
 }));
 
-function Home(props) {
+function Admin(props) {
   const classes = useStyles();
-  const history = useHistory();
-  const [open, setOpen] = React.useState(false);
-  const [link, setLink] = React.useState("");
-  const [trackLink, settrackLink] = React.useState("");
 
-  const handleOpen = () => {
-    setOpen(true);
-  };
 
-  const handleClose = () => {
-    setOpen(false);
-  };
-  const handleChange = (e) => {
-    setLink(e.target.value);
-    console.log(link);
-  };
-  const handleAdmin = () => {
-    history.push("/admin");
-  };
-  const handleSearch = () => {
-    settrackLink("/tracking/" + link);
 
-    history.push(trackLink);
+  
+  const handleBack = () => {
+    window.location = "/";
   };
 
   return (
@@ -120,8 +111,8 @@ function Home(props) {
             ระบบแจ้งซ่อมสำหรับหอพักนักเรียน โรงเรียนสุรวิวัฒน์ (SWS Dorm
             Maintenance request)
           </Typography>
-          <IconButton onClick={handleAdmin}>
-            <AccountCircleIcon
+          <IconButton onClick={handleBack}>
+            <HomeIcon
               style={{
                 color: "white",
               }}
@@ -130,86 +121,38 @@ function Home(props) {
         </Toolbar>
       </AppBar>
       <Card className={classes.Card}>
-        <Grid container jusify="center">
-          <Grid item xs={7}>
-            <Card className={classes.CardBTN}>
-              <CardMedia
-                component="img"
-                alt="Thub"
-                height="150"
-                image="https://images.unsplash.com/photo-1534398079543-7ae6d016b86a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80"
-              ></CardMedia>
-              <CardMedia>
-                <Link to="/maintenance">
-                  <Typography
-                    gutterBottom
-                    variant="h8"
-                    component="h4"
-                    className={classes.text}
-                    style={{
-                      fontFamily: "Kanit",
-                      textDecoration: "none",
-                      color: "black",
-                    }}
-                  >
-                    แจ้งซ่อม (Maintenance request)
-                  </Typography>
-                </Link>
-              </CardMedia>
-            </Card>
+        <Card className={classes.CardLogin}>
+          <Grid container justify="center">
+            <Grid item xs={7}>
+              <Typography style={{ marginBottom: "10px" }}>Login</Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                id="filled-basic"
+                label="Email"
+                variant="filled"
+                placeholder="Email"
+                style={{ marginBottom: "10px" }}
+              ></TextField>
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                id="filled-basic"
+                label="Password"
+                variant="filled"
+                placeholder="Password"
+                style={{ marginBottom: "20px" ,color:"orange"}}
+              ></TextField>
+            </Grid>
+            <Grid item xs={7}>
+              <Button className={classes.Button}>Login</Button>
+            </Grid>
           </Grid>
-          <Grid item xs={7}>
-            <Card className={classes.CardBTN}>
-              <CardMedia
-                component="img"
-                alt="Thub"
-                height="150"
-                image="https://images.unsplash.com/photo-1509255502519-c134189a24a9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80"
-              ></CardMedia>
-              <CardMedia>
-                <Typography className={classes.text} onClick={handleOpen}>
-                  ติดตามสถานะการซ่อม (Status)
-                </Typography>
-              </CardMedia>
-            </Card>
-          </Grid>
-        </Grid>
+        </Card>
       </Card>
       <Footer />
-      <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
-        className={classes.modal}
-        open={open}
-        onClose={handleClose}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-        }}
-      >
-        <Fade in={open}>
-          <Card className={classes.CardTrack}>
-            <Typography className={classes.text}>
-              ติดตามสถานะการซ่อม (Status)
-            </Typography>
-
-            <TextField
-              id="filled-basic"
-              variant="filled"
-              value={link}
-              onChange={handleChange}
-              style={{ width: "250px", borderRadius: "20px", margin: "5px" }}
-              label="รหัสงานซ่อม 5 หลัก ตัวอย่าง 00001"
-            />
-            <Button className={classes.Button} onClick={handleSearch}>
-              ค้นหา
-            </Button>
-          </Card>
-        </Fade>
-      </Modal>
     </div>
   );
 }
 
-export default Home;
+export default Admin;

@@ -88,26 +88,68 @@ const useStyles = makeStyles((theme) => ({
 
 function Request() {
   const classes = useStyles();
+
   const [info, setInfo] = React.useState({
-    refCode: "#####",
     Name: "",
     RoomCode: "",
     RoomNumber: "",
     work: "",
-    ImgURL:
-      "https://www.google.com/url?sa=i&url=https%3A%2F%2Fcommons.wikimedia.org%2Fwiki%2FFile%3ANo-image-available.png&psig=AOvVaw2V33Wg_NLtDhVRf-jEnIY8&ust=1596468417999000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCMDh7rnq_OoCFQAAAAAdAAAAABAD",
     Discription: "",
     Status: "รอดำเนินการ",
+  });
+
+  const [works, setWorks] = React.useState({
+    Image: "",
+    WorkInfo: "",
   });
 
   const handleChange = (e) => {
     setInfo({ ...info, [e.target.name]: e.target.value });
   };
 
+  const [files, setFiles] = React.useState([]);
+  // onChange function that reads files on uploading them
+  // files read are encoded as Base64
+  function onFileUpload(event) {
+    event.preventDefault();
+    // Get the file Id
+    let id = event.target.id;
+    // Create an instance of FileReader API
+    let file_reader = new FileReader();
+    // Get the actual file itself
+    let file = event.target.files[0];
+    file_reader.onload = () => {
+      // After uploading the file
+      // appending the file to our state array
+      // set the object keys and values accordingly
+      setFiles([...files, { file_id: id, uploaded_file: file_reader.result }]);
+    };
+    // reading the actual uploaded file
+    file_reader.readAsDataURL(file);
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    setWorks({ ...works, Image: files[0], WorkInfo: info });
+    console.log(works);
+  }
+
   const handleBack = () => {
     window.location = "/";
   };
-  console.log(JSON.stringify(info));
+
+  const listItems = files.map((f) => (
+    <Grid item xs={12}>
+      <Card style={{ padding: "5px", margin: "10px", width: "110px" }}>
+        <img
+          alt="preview"
+          key={f.file_id}
+          src={f.uploaded_file.length === 0 ? "" : f.uploaded_file}
+          width="100px"
+        />
+      </Card>
+    </Grid>
+  ));
   return (
     <div className="App">
       <AppBar position="static" className={classes.bar}>
@@ -139,33 +181,42 @@ function Request() {
         </Button>
 
         <Grid container justify="center">
-          <img
-            justify="center"
-            alt="icon"
-            width="64px"
-            style={{
-              alignSelf: "center",
-            }}
-            src="https://image.flaticon.com/icons/svg/2949/2949851.svg"
-          />
-          <Typography
-            justify="center"
-            gutterBottom
-            variant="h5"
-            component="h2"
-            style={{
-              fontFamily: "Kanit",
-              textDecoration: "none",
-              color: "black",
-            }}
-          >
-            แจ้งซ่อม
-          </Typography>
-        </Grid>
-
-        <Grid container justify="center">
           <Card className={classes.card}>
-            <form className={classes.root} noValidate autoComplete="off">
+            <Grid container justify="center">
+              <Grid item xs="auto">
+                <img
+                  justify="center"
+                  alt="icon"
+                  width="64px"
+                  style={{
+                    alignSelf: "center",
+                  }}
+                  src="https://image.flaticon.com/icons/svg/2949/2949851.svg"
+                />
+              </Grid>
+              <Grid item xs="auto">
+                <Typography
+                  justify="center"
+                  gutterBottom
+                  variant="h5"
+                  component="h2"
+                  style={{
+                    fontFamily: "Kanit",
+                    textDecoration: "none",
+                    color: "black",
+                  }}
+                >
+                  แจ้งซ่อม
+                </Typography>
+              </Grid>
+            </Grid>
+
+            <form
+              className={classes.root}
+              noValidate
+              autoComplete="off"
+              onSubmit={handleSubmit}
+            >
               <TextField
                 name="Name"
                 id="standard-basic"
@@ -228,32 +279,40 @@ function Request() {
                 className={classes.input}
                 id="icon-button-file"
                 type="file"
+                onChange={onFileUpload}
               />
               <label htmlFor="icon-button-file">
                 <IconButton
-                  color="primary"
+                  style={{
+                    color: "rgba(245,81,4,1)",
+                  }}
                   aria-label="upload picture"
                   component="span"
                 >
                   <PhotoCamera />
                 </IconButton>
               </label>
-              <Grid container>
-                <TextareaAutosize
-                  rowsMin={5}
-                  rowsMax={5}
-                  value={info.Discription}
-                  name="Discription"
-                  aria-label="maximum height"
-                  placeholder="อธิบายอาการเสีย"
-                  defaultValue=""
-                  style={{ width: "280px" }}
-                  onChange={handleChange}
-                />
+
+              <Grid container justsify="center">
+                {listItems}
+
+                <Grid item xs={6}>
+                  <TextareaAutosize
+                    rowsMin={5}
+                    rowsMax={5}
+                    value={info.Discription}
+                    name="Discription"
+                    aria-label="maximum height"
+                    placeholder="อธิบายอาการเสีย"
+                    defaultValue=""
+                    style={{ width: "280px" }}
+                    onChange={handleChange}
+                  />
+                </Grid>
               </Grid>
 
               <CardMedia style={{ marginTop: "45px" }}>
-                <Button className={classes.ButtonCheckin}>
+                <Button className={classes.ButtonCheckin} type="submit">
                   <i className="fas fa-paper-plane"></i>เเจ้งซ่อม
                 </Button>
               </CardMedia>
