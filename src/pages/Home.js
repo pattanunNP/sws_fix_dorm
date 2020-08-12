@@ -12,6 +12,7 @@ import {
   CardMedia,
   AppBar,
   IconButton,
+  InputLabel,
   Fade,
   Modal,
   Backdrop,
@@ -59,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
   },
 
   CardBTN: {
-    marginLeft: "60px",
+    marginLeft: "40px",
     width: "280px",
     height: "235px",
     borderRadius: "20px",
@@ -83,7 +84,6 @@ function Home(props) {
   const classes = useStyles();
   const history = useHistory();
   const [open, setOpen] = React.useState(false);
-  const [link, setLink] = React.useState("");
   const [trackLink, settrackLink] = React.useState("");
 
   const handleOpen = () => {
@@ -94,15 +94,12 @@ function Home(props) {
     setOpen(false);
   };
   const handleChange = (e) => {
-    setLink(e.target.value);
-    console.log(link);
+    settrackLink("/tracking/" + e.target.value);
   };
   const handleAdmin = () => {
     history.push("/admin");
   };
   const handleSearch = () => {
-    settrackLink("/tracking/" + link);
-
     history.push(trackLink);
   };
 
@@ -196,16 +193,29 @@ function Home(props) {
             <Typography className={classes.text}>
               ติดตามสถานะการซ่อม (Status)
             </Typography>
-
+            <InputLabel
+              style={{
+                marginTop: "45px",
+                fontFamily: "Kanit",
+                color: "red",
+              }}
+              id="demo-simple-select-label"
+            >
+              ** หมายเลขห้องตามด้วยเลขประจำตัวนักเรียน เช่น "A1016306021"
+            </InputLabel>
             <TextField
               id="filled-basic"
               variant="filled"
-              value={link}
+              
               onChange={handleChange}
               style={{ width: "250px", borderRadius: "20px", margin: "5px" }}
-              label="รหัสงานซ่อม 5 หลัก ตัวอย่าง 00001"
+              label="รหัสงานซ่อม 11 หลัก"
             />
-            <Button className={classes.Button} onClick={handleSearch}>
+            <Button
+             
+              className={classes.Button}
+              onClick={handleSearch}
+            >
               ค้นหา
             </Button>
           </Card>

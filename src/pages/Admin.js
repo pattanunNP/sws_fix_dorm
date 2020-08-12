@@ -11,7 +11,7 @@ import {
   AppBar,
   Toolbar,
   Card,
-  Typograph,
+  Typography,
 } from "@material-ui/core";
 import HomeIcon from "@material-ui/icons/Home";
 
@@ -19,13 +19,13 @@ const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     fontFamily: "Kanit",
-        justifyContent: "center",
-   
-    '& label.Mui-focused': {
-      color: 'green',
+    justifyContent: "center",
+
+    "& label.Mui-focused": {
+      color: "green",
     },
-    '& .MuiInput-underline:after': {
-      borderBottomColor: 'green',
+    "& .MuiInput-underline:after": {
+      borderBottomColor: "green",
     },
   },
   Button: {
@@ -50,8 +50,8 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: "Kanit",
     background:
       "linear-gradient( 19.5deg,  rgba(245,81,4,1) 11.2%, rgba(255,181,2,1) 91.1% )",
-    },
-  
+  },
+
   Card: {
     margin: "5px",
     width: "auto",
@@ -91,9 +91,6 @@ const useStyles = makeStyles((theme) => ({
 function Admin(props) {
   const classes = useStyles();
 
-
-
-  
   const handleBack = () => {
     window.location = "/";
   };
@@ -113,8 +110,7 @@ function Admin(props) {
         />
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
-            ระบบแจ้งซ่อมสำหรับหอพักนักเรียน โรงเรียนสุรวิวัฒน์ (SWS Dorm
-            Maintenance request)
+            ระบบแจ้งซ่อมสำหรับหอพักนักเรียน โรงเรียนสุรวิวัฒน์
           </Typography>
           <IconButton onClick={handleBack}>
             <HomeIcon
@@ -133,20 +129,18 @@ function Admin(props) {
             </Grid>
             <Grid item xs={12}>
               <TextField
-                id="filled-basic"
+                id="standard-basic"
                 label="Email"
-                variant="filled"
                 placeholder="Email"
                 style={{ marginBottom: "10px" }}
               ></TextField>
             </Grid>
             <Grid item xs={12}>
               <TextField
-                id="filled-basic"
+                id="standard-basic"
                 label="Password"
-                variant="filled"
                 placeholder="Password"
-                style={{ marginBottom: "20px" ,color:"orange"}}
+                style={{ marginBottom: "20px", color: "orange" }}
               ></TextField>
             </Grid>
             <Grid item xs={7}>

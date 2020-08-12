@@ -1,13 +1,13 @@
 import React from "react";
 import Footer from "../components/footer";
 import { makeStyles } from "@material-ui/core/styles";
-
+import axios from "axios";
 import PhotoCamera from "@material-ui/icons/PhotoCamera";
 import {
   Select,
   AppBar,
-  Toolbar ,
-  Typography ,
+  Toolbar,
+  Typography,
   CardMedia,
   Card,
   Grid,
@@ -40,13 +40,14 @@ const useStyles = makeStyles((theme) => ({
   },
   Card: {
     padding: "40px",
-    borderRadius: "30px",
+
     margin: "5px",
     width: "auto",
   },
   CardBTN: {
-    width: "280px",
-    height: "235px",
+    width: "auto",
+    padding: "10px",
+    height: "auto",
     borderRadius: "20px",
     marginTop: "20px",
   },
@@ -92,11 +93,13 @@ function Request() {
 
   const [info, setInfo] = React.useState({
     Name: "",
+    StudentId: "",
     RoomCode: "",
     RoomNumber: "",
     work: "",
     Discription: "",
     Status: "รอดำเนินการ",
+    FixDetail: "",
   });
 
   const [works, setWorks] = React.useState({
@@ -104,6 +107,26 @@ function Request() {
     WorkInfo: "",
     Date: "",
   });
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      await axios
+        .post(
+          "/api/request-mantainance?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJOYW1lIjoi4Lie4Lix4LiX4LiY4LiZ4Lix4LiZ4LiX4LmMIOC4meC4uOC5iOC4oeC4nOC5iOC4reC4hyIsIlN0dWRlbnRJZCI6NjEzMDYwMn0.CYbnwnSMfSkZZj0HL-92_VByS2chxh55YHji_LQTwOI",
+          works
+        )
+        .then(
+          (response) => {
+            console.log(response);
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+    };
+
+    fetchData();
+  }, [works]);
 
   const handleChange = (e) => {
     setInfo({ ...info, [e.target.name]: e.target.value });
@@ -151,7 +174,6 @@ function Request() {
     };
     // reading the actual uploaded file
     file_reader.readAsDataURL(file);
-    console.log(files);
   }
 
   function handleSubmit(e) {
@@ -229,7 +251,7 @@ function Request() {
         </Button>
 
         <Grid container justify="center">
-          <Card className={classes.card}>
+          <Card className={classes.CardBTN}>
             <Grid container justify="center">
               <Grid item xs="auto">
                 <Typography
@@ -253,13 +275,37 @@ function Request() {
               autoComplete="off"
               onSubmit={handleSubmit}
             >
-              <TextField
-                name="Name"
-                id="standard-basic"
-                label="ชื่อ-นามสกุล"
-                value={info.name}
-                onClick={handleChange}
-              />
+              <Grid container>
+                <Grid lg={"auto"}>
+                  <TextField
+                    name="Name"
+                    id="standard-basic"
+                    label="ชื่อ-นามสกุล"
+                    value={info.Name}
+                    onChange={handleChange}
+                    style={{
+                      fontFamily: "Kanit",
+                      textDecoration: "none",
+                      color: "black",
+                    }}
+                  />
+                </Grid>
+                <Grid lg={"auto"}>
+                  <TextField
+                    name="StudentId"
+                    id="standard-basic"
+                    label="รหัสนักเรียน"
+                    value={info.studentId}
+                    onChange={handleChange}
+                    style={{
+                      fontFamily: "Kanit",
+                      textDecoration: "none",
+                      color: "black",
+                    }}
+                  />
+                </Grid>
+              </Grid>
+
               <Grid container>
                 <Grid lg={"auto"}>
                   <InputLabel
@@ -363,17 +409,16 @@ function Request() {
 
                 <Grid item xs={12}>
                   <TextareaAutosize
-                    rowsMin={4}
-                    rowsMax={4}
+                    rowsMin={3}
+                    rowsMax={3}
                     value={info.Discription}
                     name="Discription"
                     aria-label="maximum height"
                     placeholder="อธิบายอาการเสีย"
                     defaultValue=""
                     style={{
-                      margin: "10px",
+                      marginTop: "10px",
                       width: "210px",
-
                       padding: "5px",
                       fontFamily: "Kanit",
                     }}
@@ -382,9 +427,12 @@ function Request() {
                 </Grid>
               </Grid>
 
-              <CardMedia style={{ marginTop: "60px" }}>
+              <CardMedia style={{ marginTop: "40px" }}>
                 <Button className={classes.ButtonCheckin} type="submit">
-                  <i className="fas fa-paper-plane"></i>
+                  <i
+                    className="fas fa-paper-plane"
+                    style={{ marginRight: "5px" }}
+                  ></i>
                   เเจ้งซ่อม
                 </Button>
               </CardMedia>
