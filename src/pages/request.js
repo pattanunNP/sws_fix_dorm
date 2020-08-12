@@ -19,7 +19,19 @@ import {
   IconButton,
 } from "@material-ui/core";
 import HomeIcon from "@material-ui/icons/Home";
+import FadeIn from "react-fade-in";
+import Lottie from "react-lottie";
 
+import * as successData from "../components/Loading/sucess.json";
+
+const defaultOptions2 = {
+  loop: true,
+  autoplay: true,
+  animationData: successData.default,
+  rendererSettings: {
+    preserveAspectRatio: "xMidYMid slice",
+  },
+};
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -107,17 +119,23 @@ function Request() {
     WorkInfo: "",
     Date: "",
   });
-
+const baseURL = "https://sws-mantainance.herokuapp.com/";
+  const [success, setSuccess] = React.useState(false);
   React.useEffect(() => {
     const fetchData = async () => {
       await axios
         .post(
-          "/api/request-mantainance?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJOYW1lIjoi4Lie4Lix4LiX4LiY4LiZ4Lix4LiZ4LiX4LmMIOC4meC4uOC5iOC4oeC4nOC5iOC4reC4hyIsIlN0dWRlbnRJZCI6NjEzMDYwMn0.CYbnwnSMfSkZZj0HL-92_VByS2chxh55YHji_LQTwOI",
+          baseURL+"/api/request-mantainance?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJOYW1lIjoi4Lie4Lix4LiX4LiY4LiZ4Lix4LiZ4LiX4LmMIOC4meC4uOC5iOC4oeC4nOC5iOC4reC4hyIsIlN0dWRlbnRJZCI6NjEzMDYwMn0.CYbnwnSMfSkZZj0HL-92_VByS2chxh55YHji_LQTwOI",
           works
         )
         .then(
           (response) => {
-            console.log(response);
+            setTimeout(() => {
+              setSuccess(true);
+            }, 1000);
+            setTimeout(() => {
+              window.location = "/";
+            }, 3000);
           },
           (error) => {
             console.log(error);
@@ -125,13 +143,15 @@ function Request() {
         );
     };
 
-    fetchData();
+    setTimeout(() => {
+      fetchData();
+    }, 1500);
   }, [works]);
 
   const handleChange = (e) => {
     setInfo({ ...info, [e.target.name]: e.target.value });
   };
-
+ 
   const [files, setFiles] = React.useState([]);
   // onChange function that reads files on uploading them
   // files read are encoded as Base64
@@ -240,206 +260,211 @@ function Request() {
           </Typography>
         </Toolbar>
       </AppBar>
+      {!success ? (
+        <Card className={classes.Card}>
+          <Button
+            className={classes.Button}
+            startIcon={<HomeIcon />}
+            onClick={handleBack}
+          >
+            กลับ
+          </Button>
 
-      <Card className={classes.Card}>
-        <Button
-          className={classes.Button}
-          startIcon={<HomeIcon />}
-          onClick={handleBack}
-        >
-          กลับ
-        </Button>
+          <Grid container justify="center">
+            <Card className={classes.CardBTN}>
+              <Grid container justify="center">
+                <Grid item xs="auto">
+                  <Typography
+                    justify="center"
+                    gutterBottom
+                    variant="h5"
+                    component="h2"
+                    style={{
+                      fontFamily: "Kanit",
+                      textDecoration: "none",
+                      color: "black",
+                    }}
+                  >
+                    แจ้งซ่อม
+                  </Typography>
+                </Grid>
+              </Grid>
 
-        <Grid container justify="center">
-          <Card className={classes.CardBTN}>
-            <Grid container justify="center">
-              <Grid item xs="auto">
-                <Typography
-                  justify="center"
-                  gutterBottom
-                  variant="h5"
-                  component="h2"
+              <form
+                className={classes.root}
+                autoComplete="off"
+                onSubmit={handleSubmit}
+              >
+                <Grid container>
+                  <Grid lg={"auto"}>
+                    <TextField
+                      name="Name"
+                      id="standard-basic"
+                      label="ชื่อ-นามสกุล"
+                      value={info.Name}
+                      onChange={handleChange}
+                      style={{
+                        fontFamily: "Kanit",
+                        textDecoration: "none",
+                        color: "black",
+                      }}
+                    />
+                  </Grid>
+                  <Grid lg={"auto"}>
+                    <TextField
+                      name="StudentId"
+                      id="standard-basic"
+                      label="รหัสนักเรียน"
+                      value={info.studentId}
+                      onChange={handleChange}
+                      style={{
+                        fontFamily: "Kanit",
+                        textDecoration: "none",
+                        color: "black",
+                      }}
+                    />
+                  </Grid>
+                </Grid>
+
+                <Grid container>
+                  <Grid lg={"auto"}>
+                    <InputLabel
+                      style={{
+                        marginTop: "45px",
+                        fontFamily: "Kanit",
+                      }}
+                      id="demo-simple-select-label"
+                    >
+                      รหัสห้อง
+                    </InputLabel>
+                    <Select
+                      name="RoomCode"
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={info.RoomCode}
+                      onChange={handleChange}
+                    >
+                      <MenuItem value={"A"}>A</MenuItem>
+                      <MenuItem value={"B"}>B</MenuItem>
+                      <MenuItem value={"C"}>C</MenuItem>
+                      <MenuItem value={"D"}>D</MenuItem>
+                    </Select>
+                  </Grid>
+                  <Grid item lg={"auto"}>
+                    <TextField
+                      style={{
+                        marginTop: "45px",
+                        fontFamily: "Kanit",
+                      }}
+                      name="RoomNumber"
+                      id="standard-basic"
+                      label="หมายเลขห้อง"
+                      onChange={handleChange}
+                    />
+                  </Grid>
+                </Grid>
+
+                <InputLabel
                   style={{
+                    marginTop: "60px",
                     fontFamily: "Kanit",
-                    textDecoration: "none",
-                    color: "black",
+                  }}
+                  id="demo-simple-select-label"
+                >
+                  ประเภทงาน
+                </InputLabel>
+                <Select
+                  name="work"
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={info.work}
+                  onChange={handleChange}
+                >
+                  <MenuItem value={"งานไฟฟ้า"}>งานไฟฟ้า</MenuItem>
+                  <MenuItem value={"งานประปา"}>งานประปา</MenuItem>
+                  <MenuItem value={"อื่นๆ"}>อื่น ๆ</MenuItem>
+                </Select>
+
+                <Typography
+                  style={{
+                    marginTop: "45px",
+                    fontFamily: "Kanit",
                   }}
                 >
-                  แจ้งซ่อม
+                  รูปประกอบ
                 </Typography>
-              </Grid>
-            </Grid>
-
-            <form
-              className={classes.root}
-              autoComplete="off"
-              onSubmit={handleSubmit}
-            >
-              <Grid container>
-                <Grid lg={"auto"}>
-                  <TextField
-                    name="Name"
-                    id="standard-basic"
-                    label="ชื่อ-นามสกุล"
-                    value={info.Name}
-                    onChange={handleChange}
+                <input
+                  style={{ marginTop: "60px" }}
+                  accept="image/*"
+                  className={classes.input}
+                  id="icon-button-file"
+                  type="file"
+                  onChange={onFileUpload}
+                  multiple
+                />
+                <label htmlFor="icon-button-file" style={{ marginTop: "60px" }}>
+                  <IconButton
                     style={{
-                      fontFamily: "Kanit",
-                      textDecoration: "none",
-                      color: "black",
+                      color: "rgba(245,81,4,1)",
                     }}
-                  />
-                </Grid>
-                <Grid lg={"auto"}>
-                  <TextField
-                    name="StudentId"
-                    id="standard-basic"
-                    label="รหัสนักเรียน"
-                    value={info.studentId}
-                    onChange={handleChange}
-                    style={{
-                      fontFamily: "Kanit",
-                      textDecoration: "none",
-                      color: "black",
-                    }}
-                  />
-                </Grid>
-              </Grid>
-
-              <Grid container>
-                <Grid lg={"auto"}>
-                  <InputLabel
-                    style={{
-                      marginTop: "45px",
-                      fontFamily: "Kanit",
-                    }}
-                    id="demo-simple-select-label"
+                    aria-label="upload picture"
+                    component="span"
                   >
-                    รหัสห้อง
-                  </InputLabel>
-                  <Select
-                    name="RoomCode"
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={info.RoomCode}
-                    onChange={handleChange}
+                    <PhotoCamera />
+                  </IconButton>
+                </label>
+
+                <Grid container justsify="center">
+                  <Grid
+                    item
+                    xs={12}
+                    style={{
+                      overflowX: "auto",
+                      overflowY: "50px",
+                      marginBottom: "10px",
+                    }}
                   >
-                    <MenuItem value={"A"}>A</MenuItem>
-                    <MenuItem value={"B"}>B</MenuItem>
-                    <MenuItem value={"C"}>C</MenuItem>
-                    <MenuItem value={"D"}>D</MenuItem>
-                  </Select>
-                </Grid>
-                <Grid item lg={"auto"}>
-                  <TextField
-                    style={{
-                      marginTop: "45px",
-                      fontFamily: "Kanit",
-                    }}
-                    name="RoomNumber"
-                    id="standard-basic"
-                    label="หมายเลขห้อง"
-                    onChange={handleChange}
-                  />
-                </Grid>
-              </Grid>
+                    {listItems}
+                  </Grid>
 
-              <InputLabel
-                style={{
-                  marginTop: "60px",
-                  fontFamily: "Kanit",
-                }}
-                id="demo-simple-select-label"
-              >
-                ประเภทงาน
-              </InputLabel>
-              <Select
-                name="work"
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={info.work}
-                onChange={handleChange}
-              >
-                <MenuItem value={"งานไฟฟ้า"}>งานไฟฟ้า</MenuItem>
-                <MenuItem value={"งานประปา"}>งานประปา</MenuItem>
-                <MenuItem value={"อื่นๆ"}>อื่น ๆ</MenuItem>
-              </Select>
-
-              <Typography
-                style={{
-                  marginTop: "45px",
-                  fontFamily: "Kanit",
-                }}
-              >
-                รูปประกอบ
-              </Typography>
-              <input
-                style={{ marginTop: "60px" }}
-                accept="image/*"
-                className={classes.input}
-                id="icon-button-file"
-                type="file"
-                onChange={onFileUpload}
-                multiple
-              />
-              <label htmlFor="icon-button-file" style={{ marginTop: "60px" }}>
-                <IconButton
-                  style={{
-                    color: "rgba(245,81,4,1)",
-                  }}
-                  aria-label="upload picture"
-                  component="span"
-                >
-                  <PhotoCamera />
-                </IconButton>
-              </label>
-
-              <Grid container justsify="center">
-                <Grid
-                  item
-                  xs={12}
-                  style={{
-                    overflowX: "auto",
-                    overflowY: "50px",
-                    marginBottom: "10px",
-                  }}
-                >
-                  {listItems}
+                  <Grid item xs={12}>
+                    <TextareaAutosize
+                      rowsMin={3}
+                      rowsMax={3}
+                      value={info.Discription}
+                      name="Discription"
+                      aria-label="maximum height"
+                      placeholder="อธิบายอาการเสีย"
+                      defaultValue=""
+                      style={{
+                        marginTop: "10px",
+                        width: "210px",
+                        padding: "5px",
+                        fontFamily: "Kanit",
+                      }}
+                      onChange={handleChange}
+                    />
+                  </Grid>
                 </Grid>
 
-                <Grid item xs={12}>
-                  <TextareaAutosize
-                    rowsMin={3}
-                    rowsMax={3}
-                    value={info.Discription}
-                    name="Discription"
-                    aria-label="maximum height"
-                    placeholder="อธิบายอาการเสีย"
-                    defaultValue=""
-                    style={{
-                      marginTop: "10px",
-                      width: "210px",
-                      padding: "5px",
-                      fontFamily: "Kanit",
-                    }}
-                    onChange={handleChange}
-                  />
-                </Grid>
-              </Grid>
-
-              <CardMedia style={{ marginTop: "40px" }}>
-                <Button className={classes.ButtonCheckin} type="submit">
-                  <i
-                    className="fas fa-paper-plane"
-                    style={{ marginRight: "5px" }}
-                  ></i>
-                  เเจ้งซ่อม
-                </Button>
-              </CardMedia>
-            </form>
-          </Card>
-        </Grid>
-      </Card>
+                <CardMedia style={{ marginTop: "40px" }}>
+                  <Button className={classes.ButtonCheckin} type="submit">
+                    <i
+                      className="fas fa-paper-plane"
+                      style={{ marginRight: "5px" }}
+                    ></i>
+                    เเจ้งซ่อม
+                  </Button>
+                </CardMedia>
+              </form>
+            </Card>
+          </Grid>
+        </Card>
+      ) : (
+        <FadeIn>
+          <Lottie options={defaultOptions2} height={140} width={140} />
+        </FadeIn>
+      )}
       <Footer />
     </div>
   );

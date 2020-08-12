@@ -15,6 +15,27 @@ import {
 } from "@material-ui/core";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import FadeIn from "react-fade-in";
+import Lottie from "react-lottie";
+import * as loadingData from "../components/Loading/loading.json";
+import * as successData from "../components/Loading/sucess.json";
+
+const defaultOptions = {
+  loop: true,
+  autoplay: true,
+  animationData: loadingData.default,
+  rendererSettings: {
+    preserveAspectRatio: "xMidYMid slice",
+  },
+};
+const defaultOptions2 = {
+  loop: true,
+  autoplay: true,
+  animationData: successData.default,
+  rendererSettings: {
+    preserveAspectRatio: "xMidYMid slice",
+  },
+};
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -35,7 +56,10 @@ const useStyles = makeStyles((theme) => ({
       "linear-gradient( 19.5deg,  rgba(245,81,4,1) 11.2%, rgba(255,181,2,1) 91.1% )",
   },
   Card: {
-    width: "auto",
+    justifyContent: "center",
+    minWidth: "300px",
+    minHeight: "600px",
+    textAlign: "center",
   },
   CardBTN: {
     padding: "40px",
@@ -77,19 +101,28 @@ function Track() {
 
   const [works, setWorks] = React.useState([]);
   const [reload, setReload] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
+  const [success, setSuccess] = React.useState(false);
+  const baseURL = "https://sws-mantainance.herokuapp.com/";
   React.useEffect(() => {
     const fetchData = async () => {
-      await axios("/api/track/" + id)
+      await axios(baseURL + "/api/track/" + id)
         .then((res) => {
+          setLoading(true);
           console.log(res.data.works);
           setWorks(res.data.works);
+          setTimeout(() => {
+            setSuccess(true);
+          }, 1000);
         })
         .catch((err) => {
           console.log(err);
         });
+      setReload(false);
     };
-
-    fetchData();
+    setTimeout(() => {
+      fetchData();
+    }, 1500);
   }, [reload, id]);
 
   const handleBack = () => {
@@ -97,7 +130,6 @@ function Track() {
   };
   const handleRefresh = () => {
     setReload(true);
-    setReload(false);
   };
   return (
     <div className="App">
@@ -127,156 +159,177 @@ function Track() {
       </AppBar>
       <Card className={classes.Card}>
         <Grid container jusify="center">
-          <ReactPullToRefresh
-            onRefresh={handleRefresh}
-            style={{
-              textAlign: "center",
-            }}
-          >
-            <div id="ptr">
-              <span className="genericon genericon-next"></span>
-
-              <div className="loading">
-                <span id="l1"></span>
-                <span id="l2"></span>
-                <span id="l3"></span>
+          {!success ? (
+            <FadeIn>
+              <div
+                style={{
+                  display: "flex",
+                  position: "relative",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  alignContent: "center",
+                  fontFamily: "Kanit",
+                  textAlign: "center",
+                }}
+              >
+                <h1
+                  style={{
+                    fontFamily: "Kanit",
+                    textAlign: "center",
+                  }}
+                >
+                  กำลังโหลด
+                </h1>
+                {!loading ? (
+                  <Lottie options={defaultOptions} height={140} width={140} />
+                ) : (
+                  <Lottie options={defaultOptions2} height={140} width={140} />
+                )}
               </div>
-            </div>
+            </FadeIn>
+          ) : (
+            <ReactPullToRefresh
+              onRefresh={handleRefresh}
+              style={{
+                fontFamily: "Kanit",
+                textAlign: "center",
+              }}
+            >
+              <h3>ลากลงเพื่อโหลดข้อมูลใหม่</h3>
+              {works.length === 0 ? (
+                <p>ไม่มีรายการแจ้งซ่อม</p>
+              ) : (
+                works.map((work, idx) => (
+                  <Grid item xm={12}>
+                    <Card jusify="center" className={classes.CardBTN} key={idx}>
+                      <Typography className={classes.head}>
+                        No.{idx + 1}
+                      </Typography>
+                      <CardMedia
+                        component="img"
+                        alt="Thumbnail"
+                        height="70px"
+                        width="60px"
+                        image={work.Image[0].uploaded_file}
+                      ></CardMedia>
+                      <CardMedia>
+                        <Typography
+                          gutterBottom
+                          variant="h8"
+                          component="h4"
+                          className={classes.text}
+                          style={{
+                            fontFamily: "Kanit",
+                            textDecoration: "none",
+                            color: "black",
+                          }}
+                        >
+                          ผู้เเจ้ง : {work.WorkInfo.Name}
+                        </Typography>
 
-            <h3>ลากลงเพื่อโหลดข้อมูลใหม่</h3>
-            {works.length === 0 ? (
-              <p>ไม่มีรายการแจ้งซ่อม</p>
-            ) : (
-              works.map((work, idx) => (
-                <Grid item xm={12}>
-                  <Card jusify="center" className={classes.CardBTN} key={idx}>
-                    <Typography className={classes.head}>
-                      No.{idx + 1}
-                    </Typography>
-                    <CardMedia
-                      component="img"
-                      alt="Thumbnail"
-                      height="70px"
-                      width="60px"
-                      image={work.Image[0].uploaded_file}
-                    ></CardMedia>
-                    <CardMedia>
-                      <Typography
-                        gutterBottom
-                        variant="h8"
-                        component="h4"
-                        className={classes.text}
-                        style={{
-                          fontFamily: "Kanit",
-                          textDecoration: "none",
-                          color: "black",
-                        }}
-                      >
-                        ผู้เเจ้ง : {work.WorkInfo.Name}
-                      </Typography>
-
-                      <Typography
-                        gutterBottom
-                        variant="h8"
-                        component="h4"
-                        className={classes.text}
-                        style={{
-                          fontFamily: "Kanit",
-                          textDecoration: "none",
-                          color: "black",
-                        }}
-                      >
-                        เลขห้องพัก : {work.WorkInfo.RoomCode}
-                        {work.WorkInfo.RoomNumber}
-                      </Typography>
-                      <Typography
-                        gutterBottom
-                        variant="h8"
-                        component="h4"
-                        className={classes.text}
-                        style={{
-                          fontFamily: "Kanit",
-                          textDecoration: "none",
-                          color: "black",
-                        }}
-                      >
-                        รหัสงานซ่อม : #
-                      </Typography>
-                      <Typography
-                        gutterBottom
-                        variant="h8"
-                        component="h4"
-                        className={classes.text}
-                        style={{
-                          fontFamily: "Kanit",
-                          textDecoration: "none",
-                          color: "black",
-                        }}
-                      >
-                        ประเภทงานซ่อม : {work.WorkInfo.work}
-                      </Typography>
-                      <Typography
-                        gutterBottom
-                        variant="h8"
-                        component="h4"
-                        className={classes.text}
-                        style={{
-                          fontFamily: "Kanit",
-                          textDecoration: "none",
-                          color: "black",
-                        }}
-                      >
-                        อาการเสีย :{work.WorkInfo.Discription}
-                      </Typography>
-                      <Typography
-                        gutterBottom
-                        variant="h8"
-                        component="h4"
-                        className={classes.text}
-                        style={{
-                          fontFamily: "Kanit",
-                          textDecoration: "none",
-                          color: "black",
-                        }}
-                      >
-                        วันที่แจ้ง : {work.Date}
-                      </Typography>
-                      <Typography
-                        gutterBottom
-                        variant="h8"
-                        component="h4"
-                        className={classes.text}
-                        style={{
-                          fontFamily: "Kanit",
-                          textDecoration: "none",
-                          color:
-                            work.WorkInfo.Status === "แล้วเสร็จ"
-                              ? "green"
-                              : "red",
-                        }}
-                      >
-                        สถานะ :{work.WorkInfo.Status}
-                      </Typography>
-                      <Typography
-                        gutterBottom
-                        variant="h8"
-                        component="h4"
-                        className={classes.text}
-                        style={{
-                          fontFamily: "Kanit",
-                          textDecoration: "none",
-                          color: "black",
-                        }}
-                      >
-                        คำอธิบายการซ่อม : <br></br>
-                        {work.WorkInfo.FixDetail}
-                      </Typography>
-                    </CardMedia>
-                  </Card>
-                </Grid>
-              ))
-            )}
-          </ReactPullToRefresh>
+                        <Typography
+                          gutterBottom
+                          variant="h8"
+                          component="h4"
+                          className={classes.text}
+                          style={{
+                            fontFamily: "Kanit",
+                            textDecoration: "none",
+                            color: "black",
+                          }}
+                        >
+                          เลขห้องพัก : {work.WorkInfo.RoomCode}
+                          {work.WorkInfo.RoomNumber}
+                        </Typography>
+                        <Typography
+                          gutterBottom
+                          variant="h8"
+                          component="h4"
+                          className={classes.text}
+                          style={{
+                            fontFamily: "Kanit",
+                            textDecoration: "none",
+                            color: "black",
+                          }}
+                        >
+                          รหัสงานซ่อม : #
+                        </Typography>
+                        <Typography
+                          gutterBottom
+                          variant="h8"
+                          component="h4"
+                          className={classes.text}
+                          style={{
+                            fontFamily: "Kanit",
+                            textDecoration: "none",
+                            color: "black",
+                          }}
+                        >
+                          ประเภทงานซ่อม : {work.WorkInfo.work}
+                        </Typography>
+                        <Typography
+                          gutterBottom
+                          variant="h8"
+                          component="h4"
+                          className={classes.text}
+                          style={{
+                            fontFamily: "Kanit",
+                            textDecoration: "none",
+                            color: "black",
+                          }}
+                        >
+                          อาการเสีย :{work.WorkInfo.Discription}
+                        </Typography>
+                        <Typography
+                          gutterBottom
+                          variant="h8"
+                          component="h4"
+                          className={classes.text}
+                          style={{
+                            fontFamily: "Kanit",
+                            textDecoration: "none",
+                            color: "black",
+                          }}
+                        >
+                          วันที่แจ้ง : {work.Date}
+                        </Typography>
+                        <Typography
+                          gutterBottom
+                          variant="h8"
+                          component="h4"
+                          className={classes.text}
+                          style={{
+                            fontFamily: "Kanit",
+                            textDecoration: "none",
+                            color:
+                              work.WorkInfo.Status === "แล้วเสร็จ"
+                                ? "green"
+                                : "red",
+                          }}
+                        >
+                          สถานะ :{work.WorkInfo.Status}
+                        </Typography>
+                        <Typography
+                          gutterBottom
+                          variant="h8"
+                          component="h4"
+                          className={classes.text}
+                          style={{
+                            fontFamily: "Kanit",
+                            textDecoration: "none",
+                            color: "black",
+                          }}
+                        >
+                          คำอธิบายการซ่อม : <br></br>
+                          {work.WorkInfo.FixDetail}
+                        </Typography>
+                      </CardMedia>
+                    </Card>
+                  </Grid>
+                ))
+              )}
+            </ReactPullToRefresh>
+          )}
         </Grid>
       </Card>
       <Footer />
