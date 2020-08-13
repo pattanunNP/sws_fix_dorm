@@ -104,7 +104,7 @@ function Track() {
   const [reload, setReload] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [success, setSuccess] = React.useState(false);
-  const baseURL = "https://sws-mantainance.herokuapp.com/";
+  const baseURL = "https://sws-mantainance.herokuapp.com";
   React.useEffect(() => {
     const fetchData = async () => {
       await axios(baseURL + "/api/track/" + id)
