@@ -64,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
   },
   CardBTN: {
     padding: "40px",
-    overflow: "scroll"
+    overflow: "scroll",
     width: "320px",
     height: "auto",
     borderRadius: "20px",
