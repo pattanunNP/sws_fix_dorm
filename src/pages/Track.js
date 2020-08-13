@@ -58,15 +58,16 @@ const useStyles = makeStyles((theme) => ({
   Card: {
     justifyContent: "center",
     minWidth: "300px",
-    minHeight: "600px",
     textAlign: "center",
+    height:"auto",
+    overflow: "scroll"
+
   },
   CardBTN: {
     padding: "40px",
     width: "350px",
     height: "auto",
     borderRadius: "20px",
-
     margin: "20px",
   },
   text: {
