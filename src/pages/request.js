@@ -119,7 +119,7 @@ function Request() {
     WorkInfo: "",
     Date: "",
   });
-const baseURL = "https://sws-mantainance.herokuapp.com/";
+const baseURL = "https://sws-mantainance.herokuapp.com";
   const [success, setSuccess] = React.useState(false);
   React.useEffect(() => {
     const fetchData = async () => {
