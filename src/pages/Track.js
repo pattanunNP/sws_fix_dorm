@@ -101,7 +101,7 @@ function Track() {
   let { id } = useParams();
 
   const [works, setWorks] = React.useState([]);
-  const [reload, setReload] = React.useState(false);
+  //const [reload, setReload] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [success, setSuccess] = React.useState(false);
   const baseURL = "https://sws-mantainance.herokuapp.com/";
@@ -129,9 +129,9 @@ function Track() {
   const handleBack = () => {
     window.location = "/";
   };
-  const handleRefresh = () => {
-    setReload(true);
-  };
+//   const handleRefresh = () => {
+//     setReload(true);
+//   };
   return (
     <div className="App">
       <AppBar position="static" className={classes.bar}>
@@ -188,15 +188,8 @@ function Track() {
                 )}
               </div>
             </FadeIn>
-          ) : (
-            <ReactPullToRefresh
-              onRefresh={handleRefresh}
-              style={{
-                fontFamily: "Kanit",
-                textAlign: "center",
-              }}
-            >
-              <h3>ลากลงเพื่อโหลดข้อมูลใหม่</h3>
+//           ) : (
+//             
               {works.length === 0 ? (
                 <p>ไม่มีรายการแจ้งซ่อม</p>
               ) : (
@@ -333,7 +326,6 @@ function Track() {
                   </Grid>
                 ))
               )}
-            </ReactPullToRefresh>
           )}
         </Grid>
       </Card>
