@@ -1,7 +1,6 @@
 import React from "react";
 import Footer from "../components/footer";
 import { makeStyles } from "@material-ui/core/styles";
-import ReactPullToRefresh from "react-pull-to-refresh";
 import HomeIcon from "@material-ui/icons/Home";
 
 import {
@@ -57,6 +56,7 @@ const useStyles = makeStyles((theme) => ({
   },
   Card: {
     justifyContent: "center",
+    minWidth: "300px",
     textAlign: "center",
     height:"auto",
     overflow: "scroll"
@@ -64,8 +64,7 @@ const useStyles = makeStyles((theme) => ({
   },
   CardBTN: {
     padding: "40px",
-    overflow: "scroll",
-    width: "320px",
+    width: "350px",
     height: "auto",
     borderRadius: "20px",
     margin: "20px",
@@ -101,7 +100,6 @@ function Track() {
   let { id } = useParams();
 
   const [works, setWorks] = React.useState([]);
-  //const [reload, setReload] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [success, setSuccess] = React.useState(false);
   const baseURL = "https://sws-mantainance.herokuapp.com/";
@@ -129,7 +127,7 @@ function Track() {
   const handleBack = () => {
     window.location = "/";
   };
-
+  
   return (
     <div className="App">
       <AppBar position="static" className={classes.bar}>
@@ -173,11 +171,12 @@ function Track() {
               >
                 <h1
                   style={{
+                    marginLeft:"40px",
                     fontFamily: "Kanit",
                     textAlign: "center",
                   }}
                 >
-                  กำลังโหลด...
+                  กำลังโหลด
                 </h1>
                 {!loading ? (
                   <Lottie options={defaultOptions} height={140} width={140} />
@@ -186,28 +185,26 @@ function Track() {
                 )}
               </div>
             </FadeIn>
-           ) : (
+          ) : (
             
+           
               {works.length === 0 ? (
                 <p>ไม่มีรายการแจ้งซ่อม</p>
               ) : (
+               <div>
                 works.map((work, idx) => (
-                  <Grid item xm={3}>
+                  <Grid item xm={12}>
                     <Card jusify="center" className={classes.CardBTN} key={idx}>
                       <Typography className={classes.head}>
                         No.{idx + 1}
                       </Typography>
-                  {
-                    work.Image.map((i)=>(
-                        <CardMedia
+                      <CardMedia
                         component="img"
                         alt="Thumbnail"
                         height="70px"
-                        width="55px"
-                        image={i.uploaded_file}></CardMedia>
-                      )
-                    )
-                  }
+                        width="60px"
+                        image={work.Image[0].uploaded_file}
+                      ></CardMedia>
                       <CardMedia>
                         <Typography
                           gutterBottom
@@ -322,7 +319,8 @@ function Track() {
                       </CardMedia>
                     </Card>
                   </Grid>
-                ))
+                )</div>)
+          
               )}
           )}
         </Grid>
