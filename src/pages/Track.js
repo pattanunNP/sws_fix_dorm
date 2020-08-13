@@ -213,7 +213,7 @@ function Track() {
                         alt="Thumbnail"
                         height="70px"
                         width="55px"
-                        image={work.Image[i].uploaded_file}></CardMedia>
+                        image={i.uploaded_file}></CardMedia>
                       )
                     )
                   }
