@@ -57,7 +57,6 @@ const useStyles = makeStyles((theme) => ({
   },
   Card: {
     justifyContent: "center",
-    minWidth: "300px",
     textAlign: "center",
     height:"auto",
     overflow: "scroll"
@@ -65,7 +64,8 @@ const useStyles = makeStyles((theme) => ({
   },
   CardBTN: {
     padding: "40px",
-    width: "350px",
+    overflow: "scroll"
+    width: "320px",
     height: "auto",
     borderRadius: "20px",
     margin: "20px",
@@ -179,7 +179,7 @@ function Track() {
                     textAlign: "center",
                   }}
                 >
-                  กำลังโหลด
+                  กำลังโหลด...
                 </h1>
                 {!loading ? (
                   <Lottie options={defaultOptions} height={140} width={140} />
@@ -201,18 +201,22 @@ function Track() {
                 <p>ไม่มีรายการแจ้งซ่อม</p>
               ) : (
                 works.map((work, idx) => (
-                  <Grid item xm={12}>
+                  <Grid item xm={3}>
                     <Card jusify="center" className={classes.CardBTN} key={idx}>
                       <Typography className={classes.head}>
                         No.{idx + 1}
                       </Typography>
-                      <CardMedia
-                        component="img"
+                  {
+                    work.Image.map((i)=>(
+                        <CardMedia
+                        component=`PreviewImages${i}`
                         alt="Thumbnail"
                         height="70px"
-                        width="60px"
-                        image={work.Image[0].uploaded_file}
-                      ></CardMedia>
+                        width="55px"
+                        image={work.Image[i].uploaded_file></CardMedia>
+                      )
+                    )
+                  }
                       <CardMedia>
                         <Typography
                           gutterBottom
