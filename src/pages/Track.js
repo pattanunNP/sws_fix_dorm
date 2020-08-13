@@ -284,7 +284,7 @@ function Track() {
                             color: "black",
                           }}
                         >
-                          อาการเสีย :{work.WorkInfo.Discription}
+                          อาการเสียที่แจ้ง :{work.WorkInfo.Discription}
                         </Typography>
                         <Typography
                           gutterBottom
