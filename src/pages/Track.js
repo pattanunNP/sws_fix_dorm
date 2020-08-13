@@ -209,7 +209,7 @@ function Track() {
                   {
                     work.Image.map((i)=>(
                         <CardMedia
-                        component=`PreviewImages${i}`
+                        component="PreviewImages"
                         alt="Thumbnail"
                         height="70px"
                         width="55px"
