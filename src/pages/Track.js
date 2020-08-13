@@ -186,12 +186,10 @@ function Track() {
               </div>
             </FadeIn>
           ) : (
-            
-           
               {works.length === 0 ? (
                 <p>ไม่มีรายการแจ้งซ่อม</p>
               ) : (
-               <div>
+               
                 works.map((work, idx) => (
                   <Grid item xm={12}>
                     <Card jusify="center" className={classes.CardBTN} key={idx}>
@@ -319,7 +317,7 @@ function Track() {
                       </CardMedia>
                     </Card>
                   </Grid>
-                )</div>)
+                ))
           
               )}
           )}
