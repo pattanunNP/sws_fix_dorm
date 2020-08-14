@@ -49,6 +49,8 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: "Kanit",
     flexGrow: 1,
     textDecoration: "none",
+  },input: {
+    color: "white"
   },
   bar: {
     fontFamily: "Kanit",
