@@ -206,7 +206,7 @@ function Track() {
                 <p>ไม่มีรายการแจ้งซ่อม</p>
               ) : (
                 works.map((work, idx) => (
-                  <Grid item xs={3}>
+                  <Grid item md={"auto"}>
                     <Card jusify="center" className={classes.CardBTN} key={idx}>
                       <Typography className={classes.head}>
                         No.{idx + 1}
