@@ -13,7 +13,7 @@ import {
   Card,
   Typography,
 } from "@material-ui/core";
-import { useParams, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import axios from "axios";
 import FadeIn from "react-fade-in";
 import Lottie from "react-lottie";
@@ -97,15 +97,13 @@ const useStyles = makeStyles((theme) => ({
 
 function Track() {
   const classes = useStyles();
+
   function useQuery() {
     return new URLSearchParams(useLocation().search);
   }
-  // Function นี้จะเป็นการเรียกใช้ Search paramiter
 
   let query = useQuery();
-  // เรียกใช้ function ด้านบนในรูปย่อ
   let id = query.get("id");
-  // กำหนดตัวเเปร id เพื่อรับค่าจาก query string ชื่อ id
 
   const [works, setWorks] = React.useState([]);
   const [reload, setReload] = React.useState(false);
@@ -114,7 +112,7 @@ function Track() {
   const baseURL = "https://sws-mantainance.herokuapp.com/";
   React.useEffect(() => {
     const fetchData = async () => {
-      await axios("/api/track?id=" + id)
+      await axios(baseURL+ "/api/track?id=" + id)
         .then((res) => {
           setLoading(true);
           console.log(res.data.works);
@@ -139,7 +137,6 @@ function Track() {
   const handleRefresh = () => {
     setReload(true);
   };
-
   return (
     <div className="App">
       <AppBar position="static" className={classes.bar}>
@@ -167,7 +164,7 @@ function Track() {
         </Toolbar>
       </AppBar>
       <Card className={classes.Card}>
-        <Grid container jusify="center">
+        <Grid container >
           {!success ? (
             <FadeIn>
               <div
@@ -209,7 +206,7 @@ function Track() {
                 <p>ไม่มีรายการแจ้งซ่อม</p>
               ) : (
                 works.map((work, idx) => (
-                  <Grid item xm={12}>
+                  <Grid item xs={3}>
                     <Card jusify="center" className={classes.CardBTN} key={idx}>
                       <Typography className={classes.head}>
                         No.{idx + 1}
@@ -250,7 +247,7 @@ function Track() {
                           เลขห้องพัก : {work.WorkInfo.RoomCode}
                           {work.WorkInfo.RoomNumber}
                         </Typography>
-                        <Typography
+                        {/* <Typography
                           gutterBottom
                           variant="h8"
                           component="h4"
@@ -262,7 +259,7 @@ function Track() {
                           }}
                         >
                           รหัสงานซ่อม : #
-                        </Typography>
+                        </Typography> */}
                         <Typography
                           gutterBottom
                           variant="h8"

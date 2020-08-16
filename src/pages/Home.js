@@ -97,7 +97,7 @@ function Home(props) {
     settrackLink("/tracking?id=" + e.target.value);
   };
   const handleAdmin = () => {
-    history.push("/admin");
+    history.push("/login");
   };
   const handleSearch = () => {
     history.push(trackLink);

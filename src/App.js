@@ -1,9 +1,14 @@
 import React from "react";
-import { BrowserRouter , Switch, Route } from "react-router-dom";
+import {
+  BrowserRouter,
+  Switch,
+  Route,
+
+} from "react-router-dom";
 import Request from "./pages/request";
 import Home from "./pages/Home";
 import Track from "./pages/Track";
-import Admin from "./pages/Admin";
+import AdminLogin from "./pages/AdminLogin";
 import NotFound from "./pages/NotFound";
 
 function App() {
@@ -14,8 +19,11 @@ function App() {
           <Route exact path="/" component={Home}></Route>
           <Route path="/maintenance" component={Request}></Route>
           <Route path="/tracking" component={Track}></Route>
-          <Route path="/admin" component={Admin}></Route>
+          <Route path="/admin" component={AdminLogin}></Route>
           <Route exact path="*" component={NotFound} />
+          {/* <PrivateRoute path="/protected">
+            <ProtectedPage />
+          </PrivateRoute> */}
         </Switch>
       </BrowserRouter>
     </div>
