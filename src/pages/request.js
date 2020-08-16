@@ -2,6 +2,8 @@ import React from "react";
 import Footer from "../components/footer";
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
+
+import { orange } from "@material-ui/core/colors";
 import PhotoCamera from "@material-ui/icons/PhotoCamera";
 import {
   Select,
@@ -17,11 +19,13 @@ import {
   TextareaAutosize,
   Button,
   IconButton,
+  InputAdornment,
+  CircularProgress,
 } from "@material-ui/core";
 import HomeIcon from "@material-ui/icons/Home";
 import FadeIn from "react-fade-in";
 import Lottie from "react-lottie";
-
+import AccountCircle from "@material-ui/icons/AccountCircle";
 import * as successData from "../components/Loading/sucess.json";
 
 const defaultOptions2 = {
@@ -40,6 +44,27 @@ const useStyles = makeStyles((theme) => ({
   },
   menuButton: {
     marginRight: theme.spacing(2),
+  },
+  wrapper: {
+    margin: theme.spacing(1),
+    position: "relative",
+  },
+  textbox: {
+    color: orange[500],
+  },
+  buttonProgress: {
+    color: orange[50],
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    marginTop: -12,
+    marginLeft: -12,
+  },
+  buttonSuccess: {
+    backgroundColor: orange[50],
+    "&:hover": {
+      backgroundColor: orange[70],
+    },
   },
   title: {
     fontFamily: "Kanit",
@@ -75,16 +100,7 @@ const useStyles = makeStyles((theme) => ({
   card: {
     padding: "20px",
   },
-  ButtonCheckin: {
-    background:
-      "linear-gradient( 19.5deg,  rgba(245,81,4,1) 11.2%, rgba(255,181,2,1) 91.1% )",
 
-    fontFamily: "Kanit",
-
-    color: "white",
-    width: "200px",
-    borderRadius: 50,
-  },
   Button: {
     background:
       "linear-gradient( 19.5deg,  rgba(245,81,4,1) 11.2%, rgba(255,181,2,1) 91.1% )",
@@ -119,22 +135,25 @@ function Request() {
     WorkInfo: "",
     Date: "",
   });
-const baseURL = "https://sws-mantainance.herokuapp.com/";
+  const baseURL = "https://sws-mantainance.herokuapp.com/";
   const [success, setSuccess] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
+
   React.useEffect(() => {
     const fetchData = async () => {
       await axios
         .post(
-          baseURL+"/api/request-mantainance?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJOYW1lIjoi4Lie4Lix4LiX4LiY4LiZ4Lix4LiZ4LiX4LmMIOC4meC4uOC5iOC4oeC4nOC5iOC4reC4hyIsIlN0dWRlbnRJZCI6NjEzMDYwMn0.CYbnwnSMfSkZZj0HL-92_VByS2chxh55YHji_LQTwOI",
+          "/api/request-mantainance?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJOYW1lIjoi4Lie4Lix4LiX4LiY4LiZ4Lix4LiZ4LiX4LmMIOC4meC4uOC5iOC4oeC4nOC5iOC4reC4hyIsIlN0dWRlbnRJZCI6NjEzMDYwMn0.CYbnwnSMfSkZZj0HL-92_VByS2chxh55YHji_LQTwOI",
           works
         )
         .then(
           (response) => {
             setTimeout(() => {
               setSuccess(true);
+              setLoading(false);
             }, 1000);
             setTimeout(() => {
-              window.location = "/";
+              setSuccess(false);
             }, 3000);
           },
           (error) => {
@@ -142,16 +161,16 @@ const baseURL = "https://sws-mantainance.herokuapp.com/";
           }
         );
     };
-
-    setTimeout(() => {
-      fetchData();
-    }, 1500);
+    fetchData();
   }, [works]);
 
   const handleChange = (e) => {
     setInfo({ ...info, [e.target.name]: e.target.value });
   };
- 
+  function handleLoading() {
+    setLoading(true);
+  }
+
   const [files, setFiles] = React.useState([]);
   // onChange function that reads files on uploading them
   // files read are encoded as Base64
@@ -295,32 +314,43 @@ const baseURL = "https://sws-mantainance.herokuapp.com/";
                 autoComplete="off"
                 onSubmit={handleSubmit}
               >
-                <Grid container>
-                  <Grid lg={"auto"}>
+                <Grid containe justsify="center">
+                  <Grid xs={9}>
                     <TextField
                       name="Name"
                       id="standard-basic"
                       label="ชื่อ-นามสกุล"
                       value={info.Name}
+                      variant="outlined"
+                      className={classes.textbox}
                       onChange={handleChange}
                       style={{
+                        marginTop: "45px",
                         fontFamily: "Kanit",
                         textDecoration: "none",
-                        color: "black",
+                      }}
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <AccountCircle />
+                          </InputAdornment>
+                        ),
                       }}
                     />
                   </Grid>
-                  <Grid lg={"auto"}>
+                  <Grid xs={9}>
                     <TextField
                       name="StudentId"
                       id="standard-basic"
+                      variant="outlined"
                       label="รหัสนักเรียน"
                       value={info.studentId}
                       onChange={handleChange}
                       style={{
                         fontFamily: "Kanit",
                         textDecoration: "none",
-                        color: "black",
+                        marginTop: "45px",
+                        borderColor: "yellow",
                       }}
                     />
                   </Grid>
@@ -353,9 +383,11 @@ const baseURL = "https://sws-mantainance.herokuapp.com/";
                   <Grid item lg={"auto"}>
                     <TextField
                       style={{
+                        marginLeft: "45px",
                         marginTop: "45px",
                         fontFamily: "Kanit",
                       }}
+                      variant="outlined"
                       name="RoomNumber"
                       id="standard-basic"
                       label="หมายเลขห้อง"
@@ -447,12 +479,26 @@ const baseURL = "https://sws-mantainance.herokuapp.com/";
                   </Grid>
                 </Grid>
 
-                <CardMedia style={{ marginTop: "40px" }}>
-                  <Button className={classes.ButtonCheckin} type="submit">
+                <CardMedia
+                  style={{ marginTop: "40px" }}
+                  className={classes.wrapper}
+                >
+                  <Button
+                    disabled={success}
+                    className={classes.Button}
+                    onClick={handleLoading}
+                    type="submit"
+                  >
                     <i
                       className="fas fa-paper-plane"
                       style={{ marginRight: "5px" }}
                     ></i>
+                    {loading && (
+                      <CircularProgress
+                        size={24}
+                        className={classes.buttonProgress}
+                      />
+                    )}
                     เเจ้งซ่อม
                   </Button>
                 </CardMedia>

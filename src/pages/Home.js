@@ -94,7 +94,7 @@ function Home(props) {
     setOpen(false);
   };
   const handleChange = (e) => {
-    settrackLink("/tracking/" + e.target.value);
+    settrackLink("/tracking?id=" + e.target.value);
   };
   const handleAdmin = () => {
     history.push("/admin");
