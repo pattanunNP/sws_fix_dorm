@@ -19,7 +19,7 @@ function App() {
           <Route exact path="/" component={Home}></Route>
           <Route path="/maintenance" component={Request}></Route>
           <Route path="/tracking" component={Track}></Route>
-          <Route path="/admin" component={AdminLogin}></Route>
+          <Route path="/login" component={AdminLogin}></Route>
           <Route exact path="*" component={NotFound} />
           {/* <PrivateRoute path="/protected">
             <ProtectedPage />
