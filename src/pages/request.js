@@ -435,7 +435,7 @@ function Request() {
                   id="icon-button-file"
                   type="file"
                   onChange={onFileUpload}
-                  multiple
+                  multiple = "true"
                 />
                 <label htmlFor="icon-button-file" style={{ marginTop: "60px" }}>
                   <IconButton

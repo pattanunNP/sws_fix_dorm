@@ -182,6 +182,7 @@ function Track() {
                   </Box>
                 </div>
               ) : (
+<<<<<<< HEAD
                 <Box display="flex" justifyContent="center">
                   <Lottie options={defaultOptions2} height={240} width={240} />
                 </Box>
@@ -203,6 +204,11 @@ function Track() {
                       key={idx}
                       style={{ marginTop: "10px" }}
                     >
+=======
+                works.map((work, idx) => (
+                  <Grid item md={"auto"}>
+                    <Card jusify="center" className={classes.CardBTN} key={idx}>
+>>>>>>> 2c357b8cabcf35bedd67d51dee846c3b962d36df
                       <Typography className={classes.head}>
                         No.{idx + 1}
                       </Typography>
