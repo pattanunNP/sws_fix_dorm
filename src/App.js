@@ -17,10 +17,7 @@ function App() {
           <Route path="/maintenance" component={Request}></Route>
           <Route path="/tracking" component={Track}></Route>
           <Route path="/login" component={AdminLogin}></Route>
-<<<<<<< HEAD
           <PrivateRoute exact path="/dashboard" component={Dashboard} />
-=======
->>>>>>> 2c357b8cabcf35bedd67d51dee846c3b962d36df
           <Route exact path="*" component={NotFound} />
         </Switch>
       </BrowserRouter>
