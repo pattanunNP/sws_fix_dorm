@@ -15,6 +15,7 @@ import {
   InputLabel,
   Fade,
   Modal,
+  Box,
   Backdrop,
 } from "@material-ui/core";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
@@ -97,7 +98,7 @@ function Home(props) {
     settrackLink("/tracking?id=" + e.target.value);
   };
   const handleAdmin = () => {
-    history.push("/login");
+    history.push("/dashboard");
   };
   const handleSearch = () => {
     history.push(trackLink);
@@ -129,52 +130,58 @@ function Home(props) {
           </IconButton>
         </Toolbar>
       </AppBar>
-      <Card className={classes.Card}>
-        <Grid container>
-          <Grid item xs={7}>
-            <Card className={classes.CardBTN} style={{ alignSelf: "center" }}>
-              <CardMedia
-                component="img"
-                alt="Thub"
-                height="150"
-                image="https://images.unsplash.com/photo-1534398079543-7ae6d016b86a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80"
-              ></CardMedia>
-              <CardMedia>
-                <Link to="/maintenance">
-                  <Typography
-                    gutterBottom
-                    variant="h8"
-                    component="h4"
-                    className={classes.text}
-                    style={{
-                      fontFamily: "Kanit",
-                      textDecoration: "none",
-                      color: "black",
-                    }}
-                  >
-                    แจ้งซ่อม (Maintenance request)
-                  </Typography>
-                </Link>
-              </CardMedia>
-            </Card>
+      <Box display="flex" justifyContent="center">
+        <Card className={classes.Card}>
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <Box display="flex" justifyContent="center">
+                <Card className={classes.CardBTN}>
+                  <CardMedia
+                    component="img"
+                    alt="Thub"
+                    height="150"
+                    image="https://images.unsplash.com/photo-1534398079543-7ae6d016b86a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80"
+                  ></CardMedia>
+                  <CardMedia>
+                    <Link to="/maintenance">
+                      <Typography
+                        gutterBottom
+                        variant="h8"
+                        component="h4"
+                        className={classes.text}
+                        style={{
+                          fontFamily: "Kanit",
+                          textDecoration: "none",
+                          color: "black",
+                        }}
+                      >
+                        แจ้งซ่อม (Maintenance request)
+                      </Typography>
+                    </Link>
+                  </CardMedia>
+                </Card>
+              </Box>
+            </Grid>
+            <Grid item xs={12}>
+              <Box display="flex" justifyContent="center">
+                <Card className={classes.CardBTN}>
+                  <CardMedia
+                    component="img"
+                    alt="Thub"
+                    height="150"
+                    image="https://images.unsplash.com/photo-1509255502519-c134189a24a9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80"
+                  ></CardMedia>
+                  <CardMedia>
+                    <Typography className={classes.text} onClick={handleOpen}>
+                      ติดตามสถานะการซ่อม (Status)
+                    </Typography>
+                  </CardMedia>
+                </Card>
+              </Box>
+            </Grid>
           </Grid>
-          <Grid item xs={7}>
-            <Card className={classes.CardBTN} style={{ alignSelf: "center" }}>
-              <CardMedia
-                component="img"
-                alt="Thub"
-                height="150"
-                image="https://images.unsplash.com/photo-1509255502519-c134189a24a9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80"
-              ></CardMedia>
-              <CardMedia>
-                <Typography className={classes.text} onClick={handleOpen}>
-                  ติดตามสถานะการซ่อม (Status)
-                </Typography>
-              </CardMedia>
-            </Card>
-          </Grid>
-        </Grid>
-      </Card>
+        </Card>
+      </Box>
       <Footer />
       <Modal
         aria-labelledby="transition-modal-title"
@@ -206,16 +213,11 @@ function Home(props) {
             <TextField
               id="filled-basic"
               variant="filled"
-              
               onChange={handleChange}
               style={{ width: "250px", borderRadius: "20px", margin: "5px" }}
               label="รหัสงานซ่อม 11 หลัก"
             />
-            <Button
-             
-              className={classes.Button}
-              onClick={handleSearch}
-            >
+            <Button className={classes.Button} onClick={handleSearch}>
               ค้นหา
             </Button>
           </Card>

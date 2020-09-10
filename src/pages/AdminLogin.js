@@ -1,16 +1,18 @@
 import React from "react";
 import Footer from "../components/footer";
 import { makeStyles } from "@material-ui/core/styles";
-
-// import { useHistory } from "react-router-dom";
+import axios from "axios";
+import { orange } from "@material-ui/core/colors";
 import {
   TextField,
   Button,
   IconButton,
+  CircularProgress,
   Grid,
   AppBar,
   Toolbar,
   Card,
+  Box,
   Typography,
 } from "@material-ui/core";
 import HomeIcon from "@material-ui/icons/Home";
@@ -86,14 +88,47 @@ const useStyles = makeStyles((theme) => ({
     margin: "5px",
     width: "450px",
   },
+  buttonProgress: {
+    color: orange[50],
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    marginTop: -12,
+    marginLeft: -12,
+  },
 }));
 
 function Admin(props) {
   const classes = useStyles();
+  const [userInput, setUserInput] = React.useState({});
+  const [loading, setLoading] = React.useState(false);
 
   const handleBack = () => {
     window.location = "/";
   };
+  function Login(e) {
+    e.preventDefault();
+    console.log(JSON.stringify(userInput));
+    const baseURL = "https://sws-mantainance.herokuapp.com";
+
+    const fetchData = async () => {
+      await axios.post(baseURL + "/api/login", userInput).then(
+        (response) => {
+          setLoading(true);
+          setTimeout(() => {
+            console.log(response.data);
+            localStorage.setItem("loginToken", response.data);
+            setLoading(false);
+            window.location = "/dashboard";
+          }, 1000);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    };
+    fetchData();
+  }
 
   return (
     <div className="App">
@@ -122,32 +157,55 @@ function Admin(props) {
         </Toolbar>
       </AppBar>
       <Card className={classes.Card}>
-        <Card className={classes.CardLogin}>
-          <Grid container justify="center">
-            <Grid item xs={7}>
-              <Typography style={{ marginBottom: "10px" }}>Login</Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                id="standard-basic"
-                label="Email"
-                placeholder="Email"
-                style={{ marginBottom: "10px" }}
-              ></TextField>
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                id="standard-basic"
-                label="Password"
-                placeholder="Password"
-                style={{ marginBottom: "20px", color: "orange" }}
-              ></TextField>
-            </Grid>
-            <Grid item xs={7}>
-              <Button className={classes.Button}>Login</Button>
-            </Grid>
-          </Grid>
-        </Card>
+        <Box display="flex" justifyContent="center">
+          <Card className={classes.CardLogin}>
+            <form onSubmit={Login}>
+              <Grid container justify="center">
+                <Grid item xs={7}>
+                  <Typography style={{ marginBottom: "10px" }}>
+                    Login
+                  </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    id="standard-basic"
+                    label="Email"
+                    value={userInput.email}
+                    placeholder="Email"
+                    style={{ marginBottom: "10px" }}
+                    onChange={(e) => {
+                      setUserInput({ ...userInput, email: e.target.value });
+                    }}
+                  ></TextField>
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    type="password"
+                    id="standard-basic"
+                    label="Password"
+                    value={userInput.password}
+                    placeholder="Password"
+                    style={{ marginBottom: "20px", color: "orange" }}
+                    onChange={(e) => {
+                      setUserInput({ ...userInput, password: e.target.value });
+                    }}
+                  ></TextField>
+                </Grid>
+                <Grid item xs={7}>
+                  <Button className={classes.Button} type="submit">
+                    {loading && (
+                      <CircularProgress
+                        size={24}
+                        className={classes.buttonProgress}
+                      />
+                    )}
+                    Login
+                  </Button>
+                </Grid>
+              </Grid>
+            </form>
+          </Card>
+        </Box>
       </Card>
       <Footer />
     </div>

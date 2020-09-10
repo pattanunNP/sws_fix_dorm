@@ -1,7 +1,6 @@
 import React from "react";
 import Footer from "../components/footer";
 import { makeStyles } from "@material-ui/core/styles";
-import ReactPullToRefresh from "react-pull-to-refresh";
 import HomeIcon from "@material-ui/icons/Home";
 
 import {
@@ -12,6 +11,7 @@ import {
   Toolbar,
   Card,
   Typography,
+  Box,
 } from "@material-ui/core";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
@@ -56,6 +56,7 @@ const useStyles = makeStyles((theme) => ({
       "linear-gradient( 19.5deg,  rgba(245,81,4,1) 11.2%, rgba(255,181,2,1) 91.1% )",
   },
   Card: {
+    padding: "2rem",
     justifyContent: "center",
     minWidth: "300px",
     minHeight: "600px",
@@ -106,13 +107,12 @@ function Track() {
   let id = query.get("id");
 
   const [works, setWorks] = React.useState([]);
-  const [reload, setReload] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [success, setSuccess] = React.useState(false);
   const baseURL = "https://sws-mantainance.herokuapp.com/";
   React.useEffect(() => {
     const fetchData = async () => {
-      await axios(baseURL+ "/api/track?id=" + id)
+      await axios(baseURL + "/api/track?id=" + id)
         .then((res) => {
           setLoading(true);
           console.log(res.data.works);
@@ -124,23 +124,21 @@ function Track() {
         .catch((err) => {
           console.log(err);
         });
-      setReload(false);
     };
     setTimeout(() => {
       fetchData();
     }, 1500);
-  }, [reload, id]);
+  }, [id]);
 
   const handleBack = () => {
     window.location = "/";
   };
-  const handleRefresh = () => {
-    setReload(true);
-  };
+
   return (
     <div className="App">
       <AppBar position="static" className={classes.bar}>
         <img
+          onClick={() => (window.location = "/")}
           alt="icon"
           width="64px"
           style={{
@@ -164,50 +162,47 @@ function Track() {
         </Toolbar>
       </AppBar>
       <Card className={classes.Card}>
-        <Grid container >
-          {!success ? (
-            <FadeIn>
-              <div
-                style={{
-                  display: "flex",
-                  position: "relative",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  alignContent: "center",
-                  fontFamily: "Kanit",
-                  textAlign: "center",
-                }}
-              >
-                <h1
-                  style={{
-                    fontFamily: "Kanit",
-                    textAlign: "center",
-                  }}
-                >
-                  กำลังโหลด
-                </h1>
-                {!loading ? (
-                  <Lottie options={defaultOptions} height={140} width={140} />
-                ) : (
-                  <Lottie options={defaultOptions2} height={140} width={140} />
-                )}
-              </div>
-            </FadeIn>
-          ) : (
-            <ReactPullToRefresh
-              onRefresh={handleRefresh}
-              style={{
-                fontFamily: "Kanit",
-                textAlign: "center",
-              }}
-            >
-              <h3>ลากลงเพื่อโหลดข้อมูลใหม่</h3>
-              {works.length === 0 ? (
-                <p>ไม่มีรายการแจ้งซ่อม</p>
+        {!success ? (
+          <FadeIn>
+            <div>
+              {!loading ? (
+                <div>
+                  <Box display="flex" justifyContent="center">
+                    <h1
+                      style={{
+                        fontFamily: "Kanit",
+                        textAlign: "center",
+                      }}
+                    >
+                      กำลังโหลด
+                    </h1>
+                  </Box>
+                  <Box display="flex" justifyContent="center">
+                    <Lottie options={defaultOptions} height={240} width={240} />
+                  </Box>
+                </div>
               ) : (
-                works.map((work, idx) => (
-                  <Grid item xs={3}>
-                    <Card jusify="center" className={classes.CardBTN} key={idx}>
+                <Box display="flex" justifyContent="center">
+                  <Lottie options={defaultOptions2} height={240} width={240} />
+                </Box>
+              )}
+            </div>
+          </FadeIn>
+        ) : (
+          <div>
+            {works.length === 0 ? (
+              <p>ไม่มีรายการแจ้งซ่อม</p>
+            ) : (
+              works.map((work, idx) => (
+                <Grid container spacing={1}>
+                  <Grid item xs={6} spacing={3}>
+                    <Card
+                      display="flex"
+                      justifyContent="center"
+                      className={classes.CardBTN}
+                      key={idx}
+                      style={{ marginTop: "10px" }}
+                    >
                       <Typography className={classes.head}>
                         No.{idx + 1}
                       </Typography>
@@ -216,7 +211,7 @@ function Track() {
                         alt="Thumbnail"
                         height="70px"
                         width="60px"
-                        image={work.Image[0].uploaded_file}
+                        image={work.Image.Url}
                       ></CardMedia>
                       <CardMedia>
                         <Typography
@@ -247,19 +242,7 @@ function Track() {
                           เลขห้องพัก : {work.WorkInfo.RoomCode}
                           {work.WorkInfo.RoomNumber}
                         </Typography>
-                        {/* <Typography
-                          gutterBottom
-                          variant="h8"
-                          component="h4"
-                          className={classes.text}
-                          style={{
-                            fontFamily: "Kanit",
-                            textDecoration: "none",
-                            color: "black",
-                          }}
-                        >
-                          รหัสงานซ่อม : #
-                        </Typography> */}
+
                         <Typography
                           gutterBottom
                           variant="h8"
@@ -332,11 +315,11 @@ function Track() {
                       </CardMedia>
                     </Card>
                   </Grid>
-                ))
-              )}
-            </ReactPullToRefresh>
-          )}
-        </Grid>
+                </Grid>
+              ))
+            )}
+          </div>
+        )}
       </Card>
       <Footer />
     </div>
