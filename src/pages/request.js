@@ -403,6 +403,7 @@ function Request() {
                 >
                   <MenuItem value={"งานไฟฟ้า"}>งานไฟฟ้า</MenuItem>
                   <MenuItem value={"งานประปา"}>งานประปา</MenuItem>
+                  <MenuItem value={"ส่วนกลาง"}>ส่วนกลาง</MenuItem>
                   <MenuItem value={"อื่นๆ"}>อื่น ๆ</MenuItem>
                 </Select>
 
