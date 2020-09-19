@@ -19,6 +19,7 @@ import FadeIn from "react-fade-in";
 import Lottie from "react-lottie";
 import * as loadingData from "../components/Loading/loading.json";
 import * as successData from "../components/Loading/sucess.json";
+import * as emptyData from "../components/Loading/empty.json";
 
 const defaultOptions = {
   loop: true,
@@ -32,6 +33,14 @@ const defaultOptions2 = {
   loop: true,
   autoplay: true,
   animationData: successData.default,
+  rendererSettings: {
+    preserveAspectRatio: "xMidYMid slice",
+  },
+};
+const defaultOptions3 = {
+  loop: false,
+  autoplay: true,
+  animationData: emptyData.default,
   rendererSettings: {
     preserveAspectRatio: "xMidYMid slice",
   },
@@ -133,7 +142,37 @@ function Track() {
   const handleBack = () => {
     window.location = "/";
   };
-
+  const status_color = (work) => {
+    let style = {};
+    if (work === "แล้วเสร็จ") {
+      style = {
+        fontFamily: "Kanit",
+        textDecoration: "none",
+        color: "rgb(255,255,255)",
+        backgroundColor: "rgb(102,255,102)",
+        borderRadius: "20px",
+      };
+    }
+    if (work === "รอดำเนินการ") {
+      style = {
+        fontFamily: "Kanit",
+        textDecoration: "none",
+        color: "rgb(255,255,255)",
+        backgroundColor: "rgb(255,2,102)",
+        borderRadius: "20px",
+      };
+    }
+    if (work === "รออะไหล่") {
+      style = {
+        fontFamily: "Kanit",
+        textDecoration: "none",
+        color: "rgb(255,255,255)",
+        backgroundColor: "rgb(255,200,15)",
+        borderRadius: "20px",
+      };
+    }
+    return style;
+  };
   return (
     <div className="App">
       <AppBar position="static" className={classes.bar}>
@@ -191,7 +230,19 @@ function Track() {
         ) : (
           <div>
             {works.length === 0 ? (
-              <p>ไม่มีรายการแจ้งซ่อม</p>
+              <div>
+                <Lottie options={defaultOptions3} height={240} width={240} />
+                <p
+                  style={{
+                    fontFamily: "Kanit",
+                    textDecoration: "none",
+                    fontSize: "50px",
+                    color: "black",
+                  }}
+                >
+                  ไม่มีรายการแจ้งซ่อม
+                </p>
+              </div>
             ) : (
               works.map((work, idx) => (
                 <Grid container spacing={1}>
@@ -210,8 +261,12 @@ function Track() {
                         component="img"
                         alt="Thumbnail"
                         height="70px"
-                        width="60px"
-                        image={work.Image.Url}
+                        width="70px"
+                        image={
+                          work.hasOwnProperty("Image")
+                            ? work.Image.Url
+                            : "https://res.cloudinary.com/image-chatbot/image/upload/v1600499727/sws_fix/no-image_iysxah.jpg"
+                        }
                       ></CardMedia>
                       <CardMedia>
                         <Typography
@@ -267,7 +322,7 @@ function Track() {
                             color: "black",
                           }}
                         >
-                          อาการเสีย :{work.WorkInfo.Discription}
+                          อาการเสีย : {work.WorkInfo.Discription}
                         </Typography>
                         <Typography
                           gutterBottom
@@ -287,16 +342,9 @@ function Track() {
                           variant="h8"
                           component="h4"
                           className={classes.text}
-                          style={{
-                            fontFamily: "Kanit",
-                            textDecoration: "none",
-                            color:
-                              work.WorkInfo.Status === "แล้วเสร็จ"
-                                ? "green"
-                                : "red",
-                          }}
+                          style={status_color(work.WorkInfo.Status)}
                         >
-                          สถานะ :{work.WorkInfo.Status}
+                          สถานะ : {work.WorkInfo.Status}
                         </Typography>
                         <Typography
                           gutterBottom

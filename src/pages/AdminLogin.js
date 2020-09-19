@@ -4,9 +4,10 @@ import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
 import { orange } from "@material-ui/core/colors";
 import {
+  Collapse,
+  IconButton,
   TextField,
   Button,
-  IconButton,
   CircularProgress,
   Grid,
   AppBar,
@@ -15,8 +16,9 @@ import {
   Box,
   Typography,
 } from "@material-ui/core";
+import Alert from "@material-ui/lab/Alert";
 import HomeIcon from "@material-ui/icons/Home";
-
+import CloseIcon from "@material-ui/icons/Close";
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -102,30 +104,39 @@ function Admin(props) {
   const classes = useStyles();
   const [userInput, setUserInput] = React.useState({});
   const [loading, setLoading] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
+  const [errMsg, setErrMsg] = React.useState("");
 
   const handleBack = () => {
     window.location = "/";
   };
   function Login(e) {
     e.preventDefault();
-    console.log(JSON.stringify(userInput));
+    // console.log(JSON.stringify(userInput));
     const baseURL = "https://sws-mantainance.herokuapp.com";
 
     const fetchData = async () => {
-      await axios.post(baseURL + "/api/login", userInput).then(
-        (response) => {
+      await axios
+        .post(baseURL + "/api/login", userInput)
+        .then((response) => {
           setLoading(true);
           setTimeout(() => {
-            console.log(response.data);
-            localStorage.setItem("loginToken", response.data);
-            setLoading(false);
-            window.location = "/dashboard";
+            let res = response.data;
+            console.log(res.error);
+            if (res.message.value !== "") {
+              localStorage.setItem("loginToken", response.data);
+              setLoading(false);
+              window.location = "/dashboard";
+            } else if (res.message.value === "error") {
+              setErrMsg(res.message.error);
+              setOpen(true);
+              setLoading(false);
+            }
           }, 1000);
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     };
     fetchData();
   }
@@ -159,6 +170,26 @@ function Admin(props) {
       <Card className={classes.Card}>
         <Box display="flex" justifyContent="center">
           <Card className={classes.CardLogin}>
+            <Collapse in={open}>
+              <Alert
+                severity="error"
+                action={
+                  <IconButton
+                    aria-label="error"
+                    color="inherit"
+                    size="small"
+                    onClick={() => {
+                      setOpen(false);
+                    }}
+                  >
+                    <CloseIcon fontSize="inherit" />
+                  </IconButton>
+                }
+              >
+                {errMsg}
+              </Alert>
+            </Collapse>
+
             <form onSubmit={Login}>
               <Grid container justify="center">
                 <Grid item xs={7}>
@@ -172,7 +203,7 @@ function Admin(props) {
                     label="Email"
                     value={userInput.email}
                     placeholder="Email"
-                    style={{ marginBottom: "10px" }}
+                    style={{ marginBottom: "10px", width: "320px" }}
                     onChange={(e) => {
                       setUserInput({ ...userInput, email: e.target.value });
                     }}
@@ -185,7 +216,11 @@ function Admin(props) {
                     label="Password"
                     value={userInput.password}
                     placeholder="Password"
-                    style={{ marginBottom: "20px", color: "orange" }}
+                    style={{
+                      marginBottom: "20px",
+                      color: "orange",
+                      width: "320px",
+                    }}
                     onChange={(e) => {
                       setUserInput({ ...userInput, password: e.target.value });
                     }}

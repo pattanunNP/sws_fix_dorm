@@ -82,7 +82,7 @@ const useStyles = makeStyles((theme) => ({
     width: "auto",
   },
   CardBTN: {
-    width: "auto",
+    width: "500px",
     padding: "10px",
     height: "auto",
     borderRadius: "20px",
@@ -140,34 +140,9 @@ function Request() {
 
   const [success, setSuccess] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
-  // const [submit, setSubmit] = React.useState(false);
-  React.useEffect(() => {
-    const fetchData = async () => {
-      await axios
-        .post(
-          baseURL +
-            "/api/request-mantainance?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJOYW1lIjoi4Lie4Lix4LiX4LiY4LiZ4Lix4LiZ4LiX4LmMIOC4meC4uOC5iOC4oeC4nOC5iOC4reC4hyIsIlN0dWRlbnRJZCI6NjEzMDYwMn0.CYbnwnSMfSkZZj0HL-92_VByS2chxh55YHji_LQTwOI",
-          works
-        )
-        .then(
-          (response) => {
-            setTimeout(() => {
-              setSuccess(true);
-              setLoading(false);
-            }, 1000);
-            setTimeout(() => {
-              setSuccess(false);
-            }, 3000);
-          },
-          (error) => {
-            console.log(error);
-          }
-        );
-    };
-    fetchData();
-  }, [works]);
 
   const handleChange = (e) => {
+    e.preventDefault();
     setInfo({ ...info, [e.target.name]: e.target.value });
   };
   function handleLoading() {
@@ -238,7 +213,30 @@ function Request() {
       WorkInfo: info,
       Date: dateTime,
     });
-    console.log(works);
+    // console.log(works);
+    const fetchData = async () => {
+      await axios
+        .post(
+          baseURL +
+            "/api/request-mantainance?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJOYW1lIjoi4Lie4Lix4LiX4LiY4LiZ4Lix4LiZ4LiX4LmMIOC4meC4uOC5iOC4oeC4nOC5iOC4reC4hyIsIlN0dWRlbnRJZCI6NjEzMDYwMn0.CYbnwnSMfSkZZj0HL-92_VByS2chxh55YHji_LQTwOI",
+          works
+        )
+        .then(
+          (response) => {
+            setTimeout(() => {
+              setSuccess(true);
+              setLoading(false);
+            }, 1000);
+            setTimeout(() => {
+              setSuccess(false);
+            }, 3000);
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+    };
+    fetchData();
   }
 
   const handleBack = () => {
@@ -435,7 +433,7 @@ function Request() {
                   id="icon-button-file"
                   type="file"
                   onChange={onFileUpload}
-                  multiple = "true"
+                  multiple="true"
                 />
                 <label htmlFor="icon-button-file" style={{ marginTop: "60px" }}>
                   <IconButton

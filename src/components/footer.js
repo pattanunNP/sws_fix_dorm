@@ -38,6 +38,7 @@ function Footer() {
               Copyright © 2020 All Right Revesed By pattanunNP
             </a>
           </Typography>
+          <Typography className={classes.text}>VESION: 1.2.0</Typography>
         </Grid>
       </Card>
     </div>
