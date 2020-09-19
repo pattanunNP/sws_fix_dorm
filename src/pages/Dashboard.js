@@ -400,6 +400,7 @@ function Dashboard() {
         const delData = async () => {
           setLoading(true);
           setIsDel(true);
+          setSuccess(false);
           await axios
             .post(
               baseURL +
@@ -411,6 +412,7 @@ function Dashboard() {
                 Swal.fire("ลบสำเร็จ!", "", "success");
                 setIsDel(false);
                 setLoading(false);
+                setSuccess(true);
               }, 1000);
             })
             .catch((err) => {
@@ -804,7 +806,6 @@ function Dashboard() {
                               onClick={() => {
                                 confrimDel(
                                   work[0],
-
                                   work[1].WorkInfo.RoomCode +
                                     work[1].WorkInfo.RoomNumber +
                                     work[1].WorkInfo.StudentId

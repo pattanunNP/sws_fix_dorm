@@ -130,12 +130,6 @@ function Request() {
     FixDetail: "",
   });
 
-  const [works, setWorks] = React.useState({
-    Image: [],
-    WorkInfo: "",
-    Date: "",
-  });
-
   const baseURL = "https://sws-mantainance.herokuapp.com";
 
   const [success, setSuccess] = React.useState(false);
@@ -192,34 +186,13 @@ function Request() {
     // reading the actual uploaded file
     file_reader.readAsDataURL(file);
   }
-
-  function handleSubmit(e) {
-    e.preventDefault();
-    var today = new Date();
-
-    var time =
-      today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-    const result = today.toLocaleDateString("th-TH", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      weekday: "long",
-    });
-    var dateTime = result + " เวลา " + time;
-
-    setWorks({
-      ...works,
-      Image: files,
-      WorkInfo: info,
-      Date: dateTime,
-    });
-    // console.log(works);
+  function RequestFix(files, WorkInfo, dateTime) {
     const fetchData = async () => {
       await axios
         .post(
           baseURL +
             "/api/request-mantainance?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJOYW1lIjoi4Lie4Lix4LiX4LiY4LiZ4Lix4LiZ4LiX4LmMIOC4meC4uOC5iOC4oeC4nOC5iOC4reC4hyIsIlN0dWRlbnRJZCI6NjEzMDYwMn0.CYbnwnSMfSkZZj0HL-92_VByS2chxh55YHji_LQTwOI",
-          works
+          { Image: files, WorkInfo: info, Date: dateTime }
         )
         .then(
           (response) => {
@@ -237,6 +210,21 @@ function Request() {
         );
     };
     fetchData();
+  }
+  function handleSubmit(e) {
+    e.preventDefault();
+    var today = new Date();
+
+    var time =
+      today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    const result = today.toLocaleDateString("th-TH", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      weekday: "long",
+    });
+    var dateTime = result + " เวลา " + time;
+    RequestFix(files, info, dateTime);
   }
 
   const handleBack = () => {
@@ -312,7 +300,7 @@ function Request() {
 
               <form
                 className={classes.root}
-                autoComplete="off"
+                autoComplete="on"
                 onSubmit={handleSubmit}
               >
                 <Grid containe justsify="center">
