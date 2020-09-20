@@ -239,7 +239,8 @@ function Dashboard() {
         fontFamily: "Kanit",
         textDecoration: "none",
         color: "rgb(255,255,255)",
-        backgroundColor: "rgb(102,200,102)",
+        backgroundImage:
+          "radial-gradient( circle 862px at 6% 18%,  rgba(21,219,149,1) 9.4%, rgba(26,35,160,1) 83.6% )",
         borderRadius: "20px",
       };
     }

@@ -19,6 +19,7 @@ import {
 import Alert from "@material-ui/lab/Alert";
 import HomeIcon from "@material-ui/icons/Home";
 import CloseIcon from "@material-ui/icons/Close";
+var jwt = require("jsonwebtoken");
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -102,14 +103,19 @@ const useStyles = makeStyles((theme) => ({
 
 function Admin(props) {
   const classes = useStyles();
-  const [userInput, setUserInput] = React.useState({});
+  const [userInput, setUserInput] = React.useState({ email: "", password: "" });
   const [loading, setLoading] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [errMsg, setErrMsg] = React.useState("");
+  const [status, setStatus] = React.useState("");
 
   const handleBack = () => {
     window.location = "/";
   };
+  function validateEmail(email) {
+    var re = /\S+@\S+\.\S+/;
+    return re.test(email);
+  }
   function Login(e) {
     e.preventDefault();
     // console.log(JSON.stringify(userInput));
@@ -122,15 +128,39 @@ function Admin(props) {
           setLoading(true);
           setTimeout(() => {
             let res = response.data;
-            console.log(res.error);
-            if (res.message.value !== "") {
-              localStorage.setItem("loginToken", response.data);
+            console.log(res.message);
+            if (res.message.value !== "error") {
+              setStatus("success");
+              setErrMsg("Login Success");
+              setOpen(true);
+              var older_token = jwt.sign(
+                {
+                  LoginUID: res.message.value,
+                  email: userInput.email,
+                  password: userInput.password,
+                  iat: Math.floor(Date.now() / 1000) - 30,
+                },
+                "Login"
+              );
+              // console.log(older_token);
+              localStorage.setItem("loginToken", older_token);
               setLoading(false);
-              window.location = "/dashboard";
+
+              setTimeout(() => {
+                window.location = "/dashboard";
+                setOpen(false);
+                setErrMsg("");
+              }, 2000);
             } else if (res.message.value === "error") {
               setErrMsg(res.message.error);
+              setStatus("error");
               setOpen(true);
+
               setLoading(false);
+              setTimeout(() => {
+                setOpen(false);
+                setErrMsg("");
+              }, 2000);
             }
           }, 1000);
         })
@@ -138,7 +168,26 @@ function Admin(props) {
           console.log(err);
         });
     };
-    fetchData();
+    if (userInput.email.length && userInput.password.length !== 0) {
+      if (validateEmail(userInput.email) === true) {
+        fetchData();
+      } else {
+        setStatus("error");
+        setErrMsg("Email Pattern Invailid");
+        setOpen(true);
+        setTimeout(() => {
+          setOpen(false);
+          setErrMsg("");
+        }, 2000);
+      }
+    } else if (userInput.email.length || userInput.password.length === 0) {
+      setStatus("error");
+      setErrMsg("Please Login");
+      setOpen(true);
+      setTimeout(() => {
+        setOpen(false);
+      }, 2000);
+    }
   }
 
   return (
@@ -172,7 +221,7 @@ function Admin(props) {
           <Card className={classes.CardLogin}>
             <Collapse in={open}>
               <Alert
-                severity="error"
+                severity={status}
                 action={
                   <IconButton
                     aria-label="error"
@@ -205,7 +254,10 @@ function Admin(props) {
                     placeholder="Email"
                     style={{ marginBottom: "10px", width: "320px" }}
                     onChange={(e) => {
-                      setUserInput({ ...userInput, email: e.target.value });
+                      setUserInput({
+                        ...userInput,
+                        email: e.target.value,
+                      });
                     }}
                   ></TextField>
                 </Grid>
