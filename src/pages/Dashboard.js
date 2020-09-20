@@ -174,13 +174,35 @@ function Dashboard() {
   const [update, setUpdate] = React.useState({ Status: "", Discription: "" });
   const [loading, setLoading] = React.useState(false);
   const [IsDel, setIsDel] = React.useState(false);
+  const [link, setLink] = React.useState("");
   const baseURL = "https://sws-mantainance.herokuapp.com";
+  function generalate_report() {
+    setLoading(true);
+    const fetchData = async () => {
+      await axios
+        .get(baseURL + "/api/get_report")
+        .then((res) => {
+          // console.log(res.data);
+
+          setTimeout(() => {
+            setLoading(false);
+            setLink(res.data.report.url);
+            console.log(res.data.report.url);
+          }, 1000);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    fetchData();
+  }
   React.useEffect(() => {
     const fetchData = async () => {
       await axios(baseURL + "/api/get-allwork")
         .then((res) => {
           setWorks(res.data.works);
           setTimeout(() => {
+            generalate_report();
             setSuccess(true);
           }, 1000);
         })
@@ -327,6 +349,7 @@ function Dashboard() {
     return summary;
   }
   function updateData() {
+    setLoading(true);
     const fetchData = async () => {
       await axios
         .post(
@@ -335,7 +358,6 @@ function Dashboard() {
           update
         )
         .then((res) => {
-          setLoading(true);
           setIsUpdated(true);
           setTimeout(() => {
             setIsUpdated(false);
@@ -350,6 +372,7 @@ function Dashboard() {
     };
     fetchData();
   }
+
   function ProgressWithLabel() {
     return (
       <Box position="relative" display="inline-flex">
@@ -398,10 +421,10 @@ function Dashboard() {
       confirmButtonText: "ใช่, ลบเลย!",
     }).then((result) => {
       if (result.isConfirmed) {
+        setLoading(true);
+        setIsDel(true);
+        setSuccess(false);
         const delData = async () => {
-          setLoading(true);
-          setIsDel(true);
-          setSuccess(false);
           await axios
             .post(
               baseURL +
@@ -445,8 +468,10 @@ function Dashboard() {
 
           <Button
             style={{
-              padding: "1rem",
+              padding: "0.5rem",
               color: "orange",
+              fontFamily: "Kanit",
+              textAlign: "center",
               background: "white",
               marginRight: "10px",
             }}
@@ -454,14 +479,45 @@ function Dashboard() {
               window.location = "/";
             }}
           >
-            <i className="fas fa-home"></i>
+            <i className="fas fa-home" style={{ padding: "0.1rem" }}></i>
             Home
           </Button>
+          <a href={link}>
+            <Button
+              style={{
+                padding: "0.5rem",
+                fontFamily: "Kanit",
+                textAlign: "center",
+                color: "white",
+                background: "green",
+                marginRight: "10px",
+              }}
+            >
+              <i className="fas fa-table" style={{ padding: "0.1rem" }}></i>
+              {loading && (
+                <CircularProgress
+                  size={24}
+                  className={classes.buttonProgress}
+                />
+              )}
+              รายงาน
+            </Button>
+          </a>
           <Button
-            style={{ padding: "1rem", color: "orange", background: "white" }}
+            style={{
+              fontFamily: "Kanit",
+              textAlign: "center",
+              padding: "0.5rem",
+              color: "orange",
+              background: "white",
+              marginRight: "10px",
+            }}
             onClick={handleLogout}
           >
-            <i className="fas fa-sign-out-alt"></i>
+            <i
+              className="fas fa-sign-out-alt"
+              style={{ padding: "0.1rem" }}
+            ></i>
             Logout
           </Button>
         </Toolbar>
@@ -813,7 +869,10 @@ function Dashboard() {
                                 );
                               }}
                             >
-                              <i className="fas fa-trash-alt"></i>
+                              <i
+                                className="fas fa-trash-alt"
+                                style={{ padding: "0.1rem" }}
+                              ></i>
                               {loading && (
                                 <CircularProgress
                                   size={24}
