@@ -481,28 +481,28 @@ function Dashboard() {
           >
             <i className="fas fa-home" style={{ padding: "0.1rem" }}></i>
             Home
-          </Button>
-          <a href="#"}>
-            <Button
-              style={{
-                padding: "0.5rem",
-                fontFamily: "Kanit",
-                textAlign: "center",
-                color: "white",
-                background: "green",
-                marginRight: "10px",
-              }}
-            >
-              <i className="fas fa-table" style={{ padding: "0.1rem" }}></i>
-              {loading && (
-                <CircularProgress
-                  size={24}
-                  className={classes.buttonProgress}
-                />
-              )}
-              รายงาน
-            </Button>
-          </a>
+//           </Button>
+//           <a href="#"}>
+//             <Button
+//               style={{
+//                 padding: "0.5rem",
+//                 fontFamily: "Kanit",
+//                 textAlign: "center",
+//                 color: "white",
+//                 background: "green",
+//                 marginRight: "10px",
+//               }}
+//             >
+//               <i className="fas fa-table" style={{ padding: "0.1rem" }}></i>
+//               {loading && (
+//                 <CircularProgress
+//                   size={24}
+//                   className={classes.buttonProgress}
+//                 />
+//               )}
+//               รายงาน
+//             </Button>
+//           </a>
           <Button
             style={{
               fontFamily: "Kanit",
