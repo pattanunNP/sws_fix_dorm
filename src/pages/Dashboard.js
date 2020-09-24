@@ -202,7 +202,7 @@ function Dashboard() {
         .then((res) => {
           setWorks(res.data.works);
           setTimeout(() => {
-            generalate_report();
+            //generalate_report();
             setSuccess(true);
           }, 1000);
         })
@@ -482,7 +482,7 @@ function Dashboard() {
             <i className="fas fa-home" style={{ padding: "0.1rem" }}></i>
             Home
           </Button>
-          <a href={link}>
+          <a href="#"}>
             <Button
               style={{
                 padding: "0.5rem",
