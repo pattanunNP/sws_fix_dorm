@@ -28,7 +28,7 @@
     "react-lottie": "^1.2.3",
     "react-pull-to-refresh": "^1.1.2",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "3.4.1",
+    "react-scripts": "5.0.1",
     "sweetalert2": "^10.2.0",
     "yup": "^0.29.3"
   },
